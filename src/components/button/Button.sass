@@ -1,0 +1,41 @@
+@import "../../sass/_variables"
+
+@mixin button($color)
+  padding: 1.12rem 3rem 1.12rem 3rem
+  border: none
+  cursor: pointer
+  font-size: 1.12rem
+  border-radius: 0.5rem
+  background: $color
+  &:focus
+    outline: 0
+  &:hover
+    background: darken($color, 2%)
+
+.button
+  @include button($primary)
+  color: $text-light
+
+  &-secondary
+    @include button(white)
+    border: 1px solid $primary
+    color: $primary
+    &:hover
+      color: darken($primary, 2%)
+      border-color: darken($primary, 2%)
+  &-danger
+    @include button($danger)
+    color: $text-light
+
+  &-icon
+    @include button(transparent)
+    padding: 0
+    transition: .2s
+    &:hover
+      transform: scale(1.2)
+  &-disabled
+    @include button(gray)
+    color: white
+    cursor: default
+    &:hover
+      background: gray
