@@ -15,7 +15,6 @@
 .button
   @include button($primary)
   color: $text-light
-
   &-secondary
     @include button(white)
     border: 1px solid $primary
@@ -23,6 +22,7 @@
     &:hover
       color: darken($primary, 2%)
       border-color: darken($primary, 2%)
+
   &-danger
     @include button($danger)
     color: $text-light
@@ -33,6 +33,7 @@
     transition: .2s
     &:hover
       transform: scale(1.2)
+      
   &-disabled
     @include button(gray)
     color: white
