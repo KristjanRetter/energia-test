@@ -1,0 +1,39 @@
+@import "../../sass/_variables";
+  
+.product-item 
+  display: flex
+  flex-direction: column
+  align-items: center
+  width: 100px
+  .image-container 
+    position: relative
+    .remove-button 
+      position: absolute
+      top: 0
+      right: 0
+      z-index: 1
+
+    .count
+      position: absolute
+      bottom: 0
+      left: 0
+      width: 2.25rem
+      height: 2.25rem
+      background: $primary
+      border-radius: 100%
+      display: flex
+      justify-content: center
+      align-items: center
+      color: $text-light
+      font-weight: bold
+      z-index: 1
+    .image
+      cursor: pointer
+      &-gray 
+        filter: grayscale(1)
+        cursor: default
+
+    
+  .name, .price
+    font-size: 1.12rem
+    color: $text-dark

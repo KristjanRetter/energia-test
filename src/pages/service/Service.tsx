@@ -1,10 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Button from '../../components/button/Button';
 import Container from '../../components/container/Container';
 import Header from '../../components/header/Header';
-import CloseIcon from '../../assets/close-icon.svg';
+import ProductList from '../../components/product-list/ProductList';
 
 export default function Service() {
+  const data = [
+    {
+      id: '1',
+      name: 'Cookie',
+      price: 5,
+      image:
+        'https://firebasestorage.googleapis.com/v0/b/energia-test.appspot.com/o/brownie.svg?alt=media&token=bec94bed-ed7a-4143-9dc5-2b820c6c6481',
+      amount: 6,
+    },
+  ];
   return (
     <Container>
       <div>
@@ -13,17 +23,7 @@ export default function Service() {
             Edit
           </Button>
         </Header>
-
-        <Button onClick={() => console.log('sss')}>primary</Button>
-        <Button disabled={true} onClick={() => console.log('sss')}>
-          disabled
-        </Button>
-        <Button type='danger' onClick={() => console.log('sss')}>
-          danger
-        </Button>
-        <Button type='icon' onClick={() => console.log('sss')}>
-          <img src={CloseIcon} />
-        </Button>
+        <ProductList data={data}></ProductList>
       </div>
     </Container>
   );
