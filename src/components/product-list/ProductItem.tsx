@@ -10,42 +10,49 @@ interface ProductItem {
 
 export default function ProductItem({ data, type }: ProductItem) {
   const selectedItemsList = JSON.parse(localStorage.getItem(type) || '');
-  const [count, setCount] = useState(0);
-  const [hasStock, setHasStock] = useState(true);
-  const cindex = selectedItemsList.findIndex((x: any) => x.id === data.id);
+  const asi = JSON.parse(localStorage.getItem('total') || '0');
 
-  useEffect(() => {
-    if (selectedItemsList.length && cindex !== -1) {
-      setCount(selectedItemsList[cindex].count);
-    }
-  }, []);
+  const [count, setCount] = useState(data.count || 0);
+  const [hasStock, setHasStock] = useState(true);
+  // const [total, setTotal] = useState(asi);
+  const cindex = selectedItemsList.findIndex((x: any) => x.id === data.id);
 
   useEffect(() => {
     setHasStock(count < data.amount);
     if (cindex !== -1) {
-      if (count) {
-        selectedItemsList[cindex].count = count;
-      } else {
-        selectedItemsList.splice(cindex, 1);
-      }
-    } else {
-      if (count) {
-        selectedItemsList.push({
-          id: data.id,
-          count: count,
-        });
-      }
+      selectedItemsList[cindex].count = count;
+      if (!count) selectedItemsList.splice(cindex, 1);
+    } else if (cindex === -1 && count) {
+      selectedItemsList.push({
+        id: data.id,
+        count: count,
+        price: data.price,
+      });
     }
-
     localStorage.setItem(type, JSON.stringify(selectedItemsList));
+    const ss = JSON.parse(localStorage.getItem('Food') || '');
+
+    const neee = ss.reduce((a: any, b: any) => a + b['price'], 0);
+    console.log(neee);
   }, [count]);
+
+  const increaceCount = () => {
+    localStorage.setItem('total', JSON.stringify(asi + data.price));
+
+    setCount(count + 1);
+  };
+
+  const decreaceCount = () => {
+    localStorage.setItem('total', JSON.stringify(asi - data.price));
+    setCount(count - 1);
+  };
 
   return (
     <li className='product-item'>
       <div className='image-container'>
         {count !== 0 && (
           <>
-            <Button onClick={() => setCount(count - 1)} type='icon'>
+            <Button onClick={() => decreaceCount()} type='icon'>
               <img src={CloseIcon}></img>
             </Button>
             <span className='count'>{count}</span>
@@ -56,7 +63,7 @@ export default function ProductItem({ data, type }: ProductItem) {
           alt={data.name + ' picture'}
           className={hasStock ? 'image' : 'image-gray'}
           onClick={() => {
-            if (hasStock) setCount(count + 1);
+            if (hasStock) increaceCount();
           }}
           src={data.image}
         ></img>
