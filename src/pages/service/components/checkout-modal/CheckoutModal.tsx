@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { setAmount } from '../../../../api';
-import { TotalContext } from '../../../../App';
 import Button from '../../../../components/button/Button';
 import { AppContext } from '../../context';
 import './CheckoutModal.sass';
@@ -12,21 +11,10 @@ interface CheckoutModalProps {
 }
 
 export default function CheckoutModal({ closeModal, submit }: CheckoutModalProps) {
-  const { setData, data } = useContext(AppContext);
-  const [total, setTotal] = useContext(TotalContext);
+  const { setData, data, total, setTotal } = useContext(AppContext);
   const [chasIn, setChasIn] = useState(0);
 
-  useEffect(() => {
-    console.log(data);
-  }, []);
-
-  const handleChange = (event: any) => {
-    setChasIn(event.target.value);
-  };
-
   const handleSubmit = (event: any) => {
-    console.log('enter');
-    //event.preventDefault();
     data.forEach((each: any) => {
       if (each.count) {
         const doc = { ...each, amount: each.amount - each.count };
@@ -70,7 +58,7 @@ export default function CheckoutModal({ closeModal, submit }: CheckoutModalProps
 
             <div className='col-2'>
               <form onSubmit={handleSubmit}>
-                <input autoFocus type='number' placeholder='cash in' onChange={handleChange} />
+                <input autoFocus type='number' placeholder='cash in' onChange={(event: any) => setChasIn(event.target.value)} />
               </form>
               {chasIn > total && <span className='cash-back'>Cash back: {Math.abs(total - chasIn)} €</span>}
             </div>

@@ -1,15 +1,10 @@
 import React, { useContext, useEffect } from 'react';
 import Button from '../../../../components/button/Button';
 import './Footer.sass';
-import { TotalContext } from '../../../../App';
+import { AppContext } from '../../context';
 
 export default function Footer({ onCheckout }: any) {
-  const price = 20;
-  const [total] = useContext(TotalContext);
-
-  useEffect(() => {
-    localStorage.setItem('total', JSON.stringify(total));
-  });
+  const { total } = useContext(AppContext);
 
   return (
     <footer className='footer'>

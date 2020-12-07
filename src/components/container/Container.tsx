@@ -2,7 +2,7 @@ import React, { ReactChild } from 'react';
 import './Container.sass';
 
 interface ContainerProps {
-  children: ReactChild;
+  children: React.ReactNode;
 }
 
 export default function Container({ children }: ContainerProps) {

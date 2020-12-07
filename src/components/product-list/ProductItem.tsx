@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from 'react';
 import Button from '../button/Button';
 import CloseIcon from '../../assets/close-icon.svg';
 import './ProductItem.sass';
-import { TotalContext } from '../../App';
 import { AppContext } from '../../pages/service/context';
 import * as API from '../../api';
 
@@ -16,8 +15,7 @@ export default function ProductItem({ product, type }: ProductItem) {
   const [count, setCount] = useState(product.count || 0);
   const [inStock, setInStock] = useState(true);
   const cindex = selectedItemsList.findIndex((x: any) => x.id === product.id);
-  const [total, setTotal] = useContext(TotalContext);
-  const { setData, data } = useContext(AppContext);
+  const { setData, data, total, setTotal } = useContext(AppContext);
   const xindex = data.findIndex((x: any) => x.id === product.id);
 
   useEffect(() => {
