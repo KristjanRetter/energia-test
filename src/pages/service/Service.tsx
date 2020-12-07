@@ -9,17 +9,17 @@ import { AppContext, AppProvider } from './context';
 import * as API from '../../api';
 
 export default function Service() {
-  const { setData, data, setTotal } = useContext(AppContext);
+  const { setFoodData, foodData, setTotal } = useContext(AppContext);
   const [displayModal, setDisplayModal] = useState(false);
 
   useEffect(() => {
     setTotal(JSON.parse(localStorage.getItem('total') || '0'));
-    API.getAllFoods().then((snapshot: any) => {
-      const users: any = [];
-      snapshot.docs.forEach((user: any) => {
-        users.push(user.data());
+    API.getAllFoods().then((allfoods: any) => {
+      const foods: any = [];
+      allfoods.docs.forEach((food: any) => {
+        foods.push(food.data());
       });
-      setData(users);
+      setFoodData(foods);
     });
   }, []);
   return (
@@ -29,7 +29,7 @@ export default function Service() {
           Edit
         </Button>
       </Header>
-      <ProductList title='Food' theme='#E3FCFF'></ProductList>
+      <ProductList data={foodData} title='food' theme='#E3FCFF'></ProductList>
       {displayModal && <CheckoutModal closeModal={() => setDisplayModal(false)} />}
       <Footer onCheckout={() => setDisplayModal(true)}></Footer>
     </Container>

@@ -5,19 +5,18 @@ import './ProductList.sass';
 
 interface ProductListProps {
   theme?: string;
-
+  data: any;
   title: string;
 }
 
-export default function ProductList({ theme, title }: ProductListProps) {
-  const selectedItemsList = JSON.parse(localStorage.getItem(title) || '');
-  const { setData, data } = useContext(AppContext);
+export default function ProductList({ theme, title, data }: ProductListProps) {
+  const selectedItemsList = JSON.parse(localStorage.getItem('counts') || '[]');
 
   useEffect(() => {
     console.log('list');
     console.log(data);
-    if (!localStorage.getItem(title)) {
-      localStorage.setItem(title, '[]');
+    if (!localStorage.getItem('counts')) {
+      localStorage.setItem('counts', '[]');
     }
   }, []);
 

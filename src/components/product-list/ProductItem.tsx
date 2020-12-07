@@ -11,36 +11,27 @@ interface ProductItem {
 }
 
 export default function ProductItem({ product, type }: ProductItem) {
-  const selectedItemsList = JSON.parse(localStorage.getItem(type) || '');
+  const selectedItemsList = JSON.parse(localStorage.getItem('counts') || '');
   const [count, setCount] = useState(product.count || 0);
   const [inStock, setInStock] = useState(true);
-  const cindex = selectedItemsList.findIndex((x: any) => x.id === product.id);
-  const { setData, data, total, setTotal } = useContext(AppContext);
-  const xindex = data.findIndex((x: any) => x.id === product.id);
+
+  const currentIndexStorage = selectedItemsList.findIndex((x: any) => x.id === product.id);
+  const { total, setTotal } = useContext(AppContext);
 
   useEffect(() => {
-    //API.setAmount(product.id, product);
     setInStock(count < product.amount);
-    console.log(inStock);
-    if (cindex !== -1) {
-      selectedItemsList[cindex].count = count;
-      console.log('store count', data[cindex]);
-      data[xindex].count = count;
+    if (currentIndexStorage !== -1) {
+      selectedItemsList[currentIndexStorage].count = count;
       if (!count) {
-        delete data[xindex].count;
-        selectedItemsList.splice(cindex, 1);
+        selectedItemsList.splice(currentIndexStorage, 1);
       }
-    } else if (cindex === -1 && count) {
-      console.log('store count2', cindex);
-
-      data[xindex].count = count;
+    } else if (currentIndexStorage === -1 && count) {
       selectedItemsList.push({
         id: product.id,
         count: count,
       });
     }
-    setData(data);
-    localStorage.setItem(type, JSON.stringify(selectedItemsList));
+    localStorage.setItem('counts', JSON.stringify(selectedItemsList));
   }, [count]);
 
   const increaceCount = () => {

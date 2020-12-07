@@ -1,14 +1,14 @@
 import React, { createContext, useReducer } from 'react';
 
 const initialState = {
-  data: [],
+  foodData: [],
   total: 0,
 };
 
 const reducer = (state: any, action: any) => {
   switch (action.type) {
-    case 'SET_DATA':
-      return { ...state, data: action.value };
+    case 'SET_FOOD_DATA':
+      return { ...state, foodData: action.value };
     case 'SET_TOTAL':
       console.log(action.value);
       localStorage.setItem('total', JSON.stringify(action.value));
@@ -24,9 +24,9 @@ export const AppProvider = ({ children }: any) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const value = {
-    data: state.data,
+    foodData: state.foodData,
     total: state.total,
-    setData: (value: any) => dispatch({ type: 'SET_DATA', value }),
+    setFoodData: (value: any) => dispatch({ type: 'SET_FOOD_DATA', value }),
     setTotal: (value: any) => dispatch({ type: 'SET_TOTAL', value }),
   };
 
