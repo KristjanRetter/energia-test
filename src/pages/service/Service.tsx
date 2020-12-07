@@ -1,12 +1,17 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Button from '../../components/button/Button';
 import Container from '../../components/container/Container';
 import Header from '../../components/header/Header';
 import ProductList from '../../components/product-list/ProductList';
+import CheckoutModal from './components/checkout-modal/CheckoutModal';
 import Footer from './components/footer/Footer';
+import { AppContext, AppProvider } from './context';
+import * as API from '../../api';
 
 export default function Service() {
-  const data = [
+  const { setData, data } = useContext(AppContext);
+  const [displayModal, setDisplayModal] = useState(false);
+  const info = [
     {
       id: '1',
       name: 'Cookie',
@@ -56,6 +61,20 @@ export default function Service() {
       amount: 6,
     },
   ];
+
+  useEffect(() => {
+    const users: any = [];
+    console.log('twat');
+    API.getAllFoods().then((snapshot: any) => {
+      snapshot.docs.forEach((user: any) => {
+        const currentID = user.id;
+        const appObj = { ...user.data(), ['id']: currentID };
+        users.push(appObj);
+        console.log(users);
+        setData(users);
+      });
+    });
+  }, []);
   return (
     <Container>
       <div>
@@ -64,8 +83,9 @@ export default function Service() {
             Edit
           </Button>
         </Header>
-        <ProductList title='Food' theme='#E3FCFF' data={data}></ProductList>
-        <Footer></Footer>
+        <ProductList title='Food' theme='#E3FCFF'></ProductList>
+        {displayModal && <CheckoutModal closeModal={() => setDisplayModal(false)} />}
+        <Footer onCheckout={() => setDisplayModal(true)}></Footer>
       </div>
     </Container>
   );

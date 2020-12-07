@@ -1,0 +1,59 @@
+@import "../../../../sass/_variables"
+
+.checkout-modal-overlay
+  background: green
+  position: fixed
+  width: 100%
+  height: 100%
+  top: 0
+  left: 0
+  opacity: 0.5
+  display: flex
+  justify-content: center
+  align-items: center
+
+.checkout-modal
+  position: fixed
+  width: 100%
+  height: 100%
+  top: 0
+  left: 0
+  z-index: 1
+  display: flex
+  justify-content: center
+  align-items: center
+  span
+    display: block
+  .content
+    background: white
+    padding: 2rem
+    border-radius: 16px
+    width: 100%
+    max-width: 40rem
+    .title
+      margin: 0
+
+    .buttons
+      margin-top: 4rem
+      display: flex
+      justify-content: flex-end
+      & Button:first-child
+        margin-right: 1rem
+
+    .columns
+      display: flex
+      justify-content: space-between
+      margin-top: 1rem
+      ul
+        list-style-type: none
+        padding: 0
+        margin-top: 0
+      .col-2
+        .cash-back
+          margin-top: 1rem
+        input
+          border: none
+          border-bottom: 2px solid $text-dark
+          font-size: 1.5rem
+          &:focus
+            outline: none

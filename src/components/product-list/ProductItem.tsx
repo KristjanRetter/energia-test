@@ -1,49 +1,57 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Button from '../button/Button';
 import CloseIcon from '../../assets/close-icon.svg';
 import './ProductItem.sass';
+import { TotalContext } from '../../App';
+import { AppContext } from '../../pages/service/context';
+import * as API from '../../api';
 
 interface ProductItem {
-  data: any;
+  product: any;
   type: string;
 }
 
-export default function ProductItem({ data, type }: ProductItem) {
+export default function ProductItem({ product, type }: ProductItem) {
   const selectedItemsList = JSON.parse(localStorage.getItem(type) || '');
-  const asi = JSON.parse(localStorage.getItem('total') || '0');
-
-  const [count, setCount] = useState(data.count || 0);
-  const [hasStock, setHasStock] = useState(true);
-  // const [total, setTotal] = useState(asi);
-  const cindex = selectedItemsList.findIndex((x: any) => x.id === data.id);
+  const [count, setCount] = useState(product.count || 0);
+  const [inStock, setInStock] = useState(true);
+  const cindex = selectedItemsList.findIndex((x: any) => x.id === product.id);
+  const [total, setTotal] = useContext(TotalContext);
+  const { setData, data } = useContext(AppContext);
+  const xindex = data.findIndex((x: any) => x.id === product.id);
 
   useEffect(() => {
-    setHasStock(count < data.amount);
+    //API.setAmount(product.id, product);
+    setInStock(count < product.amount);
+    console.log(inStock);
     if (cindex !== -1) {
       selectedItemsList[cindex].count = count;
-      if (!count) selectedItemsList.splice(cindex, 1);
+      console.log('store count', data[cindex]);
+      data[xindex].count = count;
+      if (!count) {
+        delete data[xindex].count;
+        selectedItemsList.splice(cindex, 1);
+      }
     } else if (cindex === -1 && count) {
+      console.log('store count2', cindex);
+
+      data[xindex].count = count;
       selectedItemsList.push({
-        id: data.id,
+        id: product.id,
         count: count,
-        price: data.price,
       });
     }
+    setData(data);
     localStorage.setItem(type, JSON.stringify(selectedItemsList));
-    const ss = JSON.parse(localStorage.getItem('Food') || '');
-
-    const neee = ss.reduce((a: any, b: any) => a + b['price'], 0);
-    console.log(neee);
   }, [count]);
 
   const increaceCount = () => {
-    localStorage.setItem('total', JSON.stringify(asi + data.price));
-
+    setTotal(total + product.price);
     setCount(count + 1);
   };
 
   const decreaceCount = () => {
-    localStorage.setItem('total', JSON.stringify(asi - data.price));
+    setTotal(total - product.price);
     setCount(count - 1);
   };
 
@@ -60,16 +68,16 @@ export default function ProductItem({ data, type }: ProductItem) {
         )}
         <img
           height='100px'
-          alt={data.name + ' picture'}
-          className={hasStock ? 'image' : 'image-gray'}
+          alt={product.name + ' picture'}
+          className={inStock ? 'image' : 'image-gray'}
           onClick={() => {
-            if (hasStock) increaceCount();
+            if (inStock) increaceCount();
           }}
-          src={data.image}
+          src={product.image}
         ></img>
       </div>
-      <span className='name'>{data.name}</span>
-      <span className='price'>{data.price} €</span>
+      <span className='name'>{product.name}</span>
+      <span className='price'>{product.price} €</span>
     </li>
   );
 }

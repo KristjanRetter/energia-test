@@ -1,22 +1,23 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
+import { AppContext } from '../../pages/service/context';
 import ProductItem from './ProductItem';
 import './ProductList.sass';
 
 interface ProductListProps {
   theme?: string;
-  data: any;
+
   title: string;
 }
 
-export default function ProductList({ theme, data, title }: ProductListProps) {
+export default function ProductList({ theme, title }: ProductListProps) {
   const selectedItemsList = JSON.parse(localStorage.getItem(title) || '');
+  const { setData, data } = useContext(AppContext);
 
   useEffect(() => {
+    console.log('list');
+    console.log(data);
     if (!localStorage.getItem(title)) {
       localStorage.setItem(title, '[]');
-    }
-    if (!localStorage.getItem('total')) {
-      localStorage.setItem('total', JSON.stringify(0));
     }
   }, []);
 
@@ -35,7 +36,7 @@ export default function ProductList({ theme, data, title }: ProductListProps) {
       <h3 className='product-list-title'>{title}</h3>
       <ul className='product-list' style={{ background: theme }}>
         {data.map((food: any) => (
-          <ProductItem type={title} key={food.id} data={addCount(food)} />
+          <ProductItem type={title} key={food.id} product={addCount(food)} />
         ))}
       </ul>
     </>
