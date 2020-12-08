@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import Button from '../../../../components/button/Button';
 import './Footer.sass';
-import { AppContext } from '../../context';
+import { AppContext } from '../../../../common/AppContext';
 
 export default function Footer({ onCheckout, onReset }: any) {
   const { total } = useContext(AppContext);

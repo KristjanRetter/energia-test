@@ -2,8 +2,8 @@ import React, { useState, useEffect, useContext } from 'react';
 import Button from '../button/Button';
 import CloseIcon from '../../assets/close-icon.svg';
 import './ProductItem.sass';
-import { AppContext } from '../../pages/service/context';
-import * as API from '../../api';
+import { AppContext } from '../../common/AppContext';
+import * as API from '../../common/api';
 
 interface ProductItem {
   product: any;
@@ -12,36 +12,42 @@ interface ProductItem {
 }
 
 export default function ProductItem({ product, type, edit }: ProductItem) {
-  const selectedProductsList = JSON.parse(localStorage.getItem('counts') || '[]');
+  const { total, setTotal, setSelectedProducts, selectedProducts } = useContext(AppContext);
   const [count, setCount] = useState(product.count || 0);
   const [inStock, setInStock] = useState(true);
+  const [first, setFirst] = useState(true);
+
   const [amount, setAmount] = useState(product.amount);
 
-  const productLocalStorageIndex = selectedProductsList.findIndex((x: any) => x.id === product.id);
-  const { total, setTotal } = useContext(AppContext);
+  const productLocalStorageIndex = selectedProducts.findIndex((x: any) => x.id === product.id);
 
   useEffect(() => {
     setInStock(count < product.amount);
-    const isProductSelected = productLocalStorageIndex !== -1;
-    if (isProductSelected) {
-      selectedProductsList[productLocalStorageIndex].count = count;
-      if (!count) {
-        selectedProductsList.splice(productLocalStorageIndex, 1);
+
+    if (!edit || !first) {
+      const isProductSelected = productLocalStorageIndex !== -1;
+      if (edit) return;
+      if (isProductSelected) {
+        selectedProducts[productLocalStorageIndex].count = count;
+        if (!count) {
+          selectedProducts.splice(productLocalStorageIndex, 1);
+        }
+      } else if (!isProductSelected && count) {
+        selectedProducts.push({
+          ...product,
+          count: count,
+        });
       }
-    } else if (!isProductSelected && count) {
-      selectedProductsList.push({
-        ...product,
-        count: count,
-      });
+      setSelectedProducts(selectedProducts);
     }
-    localStorage.setItem('counts', JSON.stringify(selectedProductsList));
+    setFirst(false);
   }, [count]);
 
   useEffect(() => {
-    if (selectedProductsList.length === 0) {
+    if (selectedProducts.length === 0) {
       setCount(0);
     }
-  }, [selectedProductsList]);
+  }, [selectedProducts]);
 
   const increaceCount = () => {
     setTotal(total + product.price);

@@ -1,5 +1,4 @@
-import React, { useContext, useEffect } from 'react';
-import { AppContext } from '../../pages/service/context';
+import React from 'react';
 import ProductItem from './ProductItem';
 import './ProductList.sass';
 

@@ -5,19 +5,16 @@ import Header from '../../components/header/Header';
 import ProductList from '../../components/product-list/ProductList';
 import CheckoutModal from './components/checkout-modal/CheckoutModal';
 import Footer from './components/footer/Footer';
-import { AppContext, AppProvider } from './context';
-import * as API from '../../api';
+import { AppContext } from '../../common/AppContext';
 import { Link } from 'react-router-dom';
 
 export default function Service() {
-  const { setFoodData, foodData, clothesData, setClothesData, setTotal, getAllProducts } = useContext(AppContext);
+  const { foodData, clothesData, setTotal, getAllProducts } = useContext(AppContext);
   const [displayModal, setDisplayModal] = useState(false);
 
   useEffect(() => {
     setTotal(JSON.parse(localStorage.getItem('total') || '0'));
-
     getAllProducts();
-    console.log('service', foodData, clothesData);
   }, []);
 
   return (

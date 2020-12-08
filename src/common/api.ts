@@ -1,4 +1,4 @@
-import { db } from './common/firebase';
+import { db } from './firebase';
 
 export const getAllFoods = () => {
   return db.collection('food').get();

@@ -1,6 +1,6 @@
 import React, { createContext, useEffect, useState } from 'react';
 import './App.sass';
-import { AppProvider } from './pages/service/context';
+import { AppProvider } from './common/AppContext';
 import Service from './pages/service/Service';
 import { BrowserRouter as Router, Switch, Route, Link, useRouteMatch, useParams } from 'react-router-dom';
 import Edit from './pages/edit/Edit';

@@ -4,11 +4,10 @@ import Button from '../../components/button/Button';
 import Container from '../../components/container/Container';
 import Header from '../../components/header/Header';
 import ProductList from '../../components/product-list/ProductList';
-import { AppContext } from '../service/context';
+import { AppContext } from '../../common/AppContext';
 
 export default function Edit() {
-  const { setFoodData, foodData, clothesData, setClothesData, setTotal } = useContext(AppContext);
-
+  const { setFoodData, foodData, selectedProducts, clothesData, setClothesData, setTotal } = useContext(AppContext);
   return (
     <Container>
       <Header title='Edit' description='Here you can change the amount of available products.'>

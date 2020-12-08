@@ -1,9 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { setAmount } from '../../../../api';
+import { setAmount } from '../../../../common/api';
 import Button from '../../../../components/button/Button';
-import { AppContext } from '../../context';
+import { AppContext } from '../../../../common/AppContext';
 import './CheckoutModal.sass';
-import * as API from '../../../../api';
 
 interface CheckoutModalProps {
   closeModal: () => void;
@@ -11,12 +10,11 @@ interface CheckoutModalProps {
 }
 
 export default function CheckoutModal({ closeModal, submit }: CheckoutModalProps) {
-  const { setFoodData, setClothesData, total, setTotal, getAllProducts } = useContext(AppContext);
+  const { selectedProducts, total, setTotal, getAllProducts, setSelectedProducts } = useContext(AppContext);
   const [chasIn, setChasIn] = useState(0);
-  const selectedItems = JSON.parse(localStorage.getItem('counts') || '[]');
 
   const handleSubmit = (event: any) => {
-    selectedItems.forEach((each: any) => {
+    selectedProducts.forEach((each: any) => {
       if (each.count) {
         const doc = { ...each, amount: each.amount - each.count };
         delete doc.count;
@@ -24,11 +22,12 @@ export default function CheckoutModal({ closeModal, submit }: CheckoutModalProps
       }
     });
     setTotal(0);
+    localStorage.clear();
+    setSelectedProducts([]);
 
-    getAllProducts();
-
-    localStorage.setItem('counts', '[]');
-
+    if (!selectedProducts) {
+      getAllProducts();
+    }
     closeModal();
   };
 
@@ -41,7 +40,7 @@ export default function CheckoutModal({ closeModal, submit }: CheckoutModalProps
           <div className='columns'>
             <div className='col-1'>
               <ul>
-                {selectedItems.map((item: any) => {
+                {selectedProducts.map((item: any) => {
                   return item.count && <li key={item.id}>{`${item.count} ${item.name} ${item.price * item.count}€`}</li>;
                 })}
               </ul>
