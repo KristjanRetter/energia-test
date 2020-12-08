@@ -10,26 +10,14 @@ import * as API from '../../api';
 import { Link } from 'react-router-dom';
 
 export default function Service() {
-  const { setFoodData, foodData, clothesData, setClothesData, setTotal } = useContext(AppContext);
+  const { setFoodData, foodData, clothesData, setClothesData, setTotal, getAllProducts } = useContext(AppContext);
   const [displayModal, setDisplayModal] = useState(false);
 
   useEffect(() => {
     setTotal(JSON.parse(localStorage.getItem('total') || '0'));
-    API.getAllFoods().then((allfoods: any) => {
-      const foods: any = [];
-      allfoods.docs.forEach((food: any) => {
-        foods.push(food.data());
-      });
-      setFoodData(foods);
-    });
 
-    API.getAllClothes().then((allClothes: any) => {
-      const clothes: any = [];
-      allClothes.docs.forEach((clothing: any) => {
-        clothes.push(clothing.data());
-      });
-      setClothesData(clothes);
-    });
+    getAllProducts();
+    console.log('service', foodData, clothesData);
   }, []);
 
   return (

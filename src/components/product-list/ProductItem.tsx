@@ -12,29 +12,36 @@ interface ProductItem {
 }
 
 export default function ProductItem({ product, type, edit }: ProductItem) {
-  const selectedItemsList = JSON.parse(localStorage.getItem('counts') || '');
+  const selectedProductsList = JSON.parse(localStorage.getItem('counts') || '[]');
   const [count, setCount] = useState(product.count || 0);
   const [inStock, setInStock] = useState(true);
   const [amount, setAmount] = useState(product.amount);
 
-  const currentIndexStorage = selectedItemsList.findIndex((x: any) => x.id === product.id);
+  const productLocalStorageIndex = selectedProductsList.findIndex((x: any) => x.id === product.id);
   const { total, setTotal } = useContext(AppContext);
 
   useEffect(() => {
     setInStock(count < product.amount);
-    if (currentIndexStorage !== -1) {
-      selectedItemsList[currentIndexStorage].count = count;
+    const isProductSelected = productLocalStorageIndex !== -1;
+    if (isProductSelected) {
+      selectedProductsList[productLocalStorageIndex].count = count;
       if (!count) {
-        selectedItemsList.splice(currentIndexStorage, 1);
+        selectedProductsList.splice(productLocalStorageIndex, 1);
       }
-    } else if (currentIndexStorage === -1 && count) {
-      selectedItemsList.push({
+    } else if (!isProductSelected && count) {
+      selectedProductsList.push({
         ...product,
         count: count,
       });
     }
-    localStorage.setItem('counts', JSON.stringify(selectedItemsList));
+    localStorage.setItem('counts', JSON.stringify(selectedProductsList));
   }, [count]);
+
+  useEffect(() => {
+    if (selectedProductsList.length === 0) {
+      setCount(0);
+    }
+  }, [selectedProductsList]);
 
   const increaceCount = () => {
     setTotal(total + product.price);

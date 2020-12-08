@@ -11,7 +11,7 @@ interface CheckoutModalProps {
 }
 
 export default function CheckoutModal({ closeModal, submit }: CheckoutModalProps) {
-  const { setFoodData, setClothesData, total, setTotal } = useContext(AppContext);
+  const { setFoodData, setClothesData, total, setTotal, getAllProducts } = useContext(AppContext);
   const [chasIn, setChasIn] = useState(0);
   const selectedItems = JSON.parse(localStorage.getItem('counts') || '[]');
 
@@ -25,22 +25,7 @@ export default function CheckoutModal({ closeModal, submit }: CheckoutModalProps
     });
     setTotal(0);
 
-    const users: any = [];
-    API.getAllFoods().then((allfoods: any) => {
-      const foods: any = [];
-      allfoods.docs.forEach((food: any) => {
-        foods.push(food.data());
-      });
-      setFoodData(foods);
-    });
-
-    API.getAllClothes().then((allClothes: any) => {
-      const clothes: any = [];
-      allClothes.docs.forEach((clothing: any) => {
-        clothes.push(clothing.data());
-      });
-      setClothesData(clothes);
-    });
+    getAllProducts();
 
     localStorage.setItem('counts', '[]');
 
