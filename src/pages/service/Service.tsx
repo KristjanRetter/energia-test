@@ -7,9 +7,10 @@ import CheckoutModal from './components/checkout-modal/CheckoutModal';
 import Footer from './components/footer/Footer';
 import { AppContext, AppProvider } from './context';
 import * as API from '../../api';
+import { Link } from 'react-router-dom';
 
 export default function Service() {
-  const { setFoodData, foodData, setTotal } = useContext(AppContext);
+  const { setFoodData, foodData, clothesData, setClothesData, setTotal } = useContext(AppContext);
   const [displayModal, setDisplayModal] = useState(false);
 
   useEffect(() => {
@@ -21,15 +22,24 @@ export default function Service() {
       });
       setFoodData(foods);
     });
+
+    API.getAllClothes().then((allClothes: any) => {
+      const clothes: any = [];
+      allClothes.docs.forEach((clothing: any) => {
+        clothes.push(clothing.data());
+      });
+      setClothesData(clothes);
+    });
   }, []);
   return (
     <Container>
       <Header title='Service' description='Click on the products picture to add it on the bill.'>
-        <Button type='secondary' onClick={() => console.log('sss')}>
-          Edit
-        </Button>
+        <Link to='/edit'>
+          <Button type='secondary'>Edit</Button>
+        </Link>
       </Header>
       <ProductList data={foodData} title='food' theme='#E3FCFF'></ProductList>
+      <ProductList data={clothesData} title='clothes' theme='#E3FFF3'></ProductList>
       {displayModal && <CheckoutModal closeModal={() => setDisplayModal(false)} />}
       <Footer onCheckout={() => setDisplayModal(true)}></Footer>
     </Container>

@@ -11,30 +11,39 @@ interface CheckoutModalProps {
 }
 
 export default function CheckoutModal({ closeModal, submit }: CheckoutModalProps) {
-  const { setData, data, total, setTotal } = useContext(AppContext);
+  const { setFoodData, setClothesData, total, setTotal } = useContext(AppContext);
   const [chasIn, setChasIn] = useState(0);
+  const selectedItems = JSON.parse(localStorage.getItem('counts') || '[]');
 
   const handleSubmit = (event: any) => {
-    data.forEach((each: any) => {
+    selectedItems.forEach((each: any) => {
       if (each.count) {
         const doc = { ...each, amount: each.amount - each.count };
         delete doc.count;
-        setAmount(each.id, doc);
+        setAmount(each.type, each.id, doc);
       }
     });
-    localStorage.setItem('Food', '[]');
     setTotal(0);
 
     const users: any = [];
-    API.getAllFoods().then((snapshot: any) => {
-      snapshot.docs.forEach((user: any) => {
-        const currentID = user.id;
-        const appObj = { ...user.data(), ['id']: currentID };
-        users.push(appObj);
-        console.log(users);
-        setData(users);
+    API.getAllFoods().then((allfoods: any) => {
+      const foods: any = [];
+      allfoods.docs.forEach((food: any) => {
+        foods.push(food.data());
       });
+      setFoodData(foods);
     });
+
+    API.getAllClothes().then((allClothes: any) => {
+      const clothes: any = [];
+      allClothes.docs.forEach((clothing: any) => {
+        clothes.push(clothing.data());
+      });
+      setClothesData(clothes);
+    });
+
+    localStorage.setItem('counts', '[]');
+
     closeModal();
   };
 
@@ -47,7 +56,7 @@ export default function CheckoutModal({ closeModal, submit }: CheckoutModalProps
           <div className='columns'>
             <div className='col-1'>
               <ul>
-                {data.map((item: any) => {
+                {selectedItems.map((item: any) => {
                   return item.count && <li key={item.id}>{`${item.count} ${item.name} ${item.price * item.count}€`}</li>;
                 })}
               </ul>

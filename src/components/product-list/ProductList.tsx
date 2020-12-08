@@ -27,11 +27,6 @@ export default function ProductList({ theme, title, data }: ProductListProps) {
 
   return (
     <>
-      <button
-        onClick={() => {
-          localStorage.setItem(title, '[]'), localStorage.setItem('total', '0');
-        }}
-      ></button>
       <h3 className='product-list-title'>{title}</h3>
       <ul className='product-list' style={{ background: theme }}>
         {data.map((food: any) => (

@@ -18,6 +18,8 @@ export default function ProductItem({ product, type }: ProductItem) {
   const currentIndexStorage = selectedItemsList.findIndex((x: any) => x.id === product.id);
   const { total, setTotal } = useContext(AppContext);
 
+  const edit = true;
+
   useEffect(() => {
     setInStock(count < product.amount);
     if (currentIndexStorage !== -1) {
@@ -27,7 +29,7 @@ export default function ProductItem({ product, type }: ProductItem) {
       }
     } else if (currentIndexStorage === -1 && count) {
       selectedItemsList.push({
-        id: product.id,
+        ...product,
         count: count,
       });
     }
@@ -44,29 +46,44 @@ export default function ProductItem({ product, type }: ProductItem) {
     setCount(count - 1);
   };
 
+  const handleDisplayControlls = () => {
+    if (count !== 0 && !edit) {
+      return (
+        <>
+          <Button onClick={() => decreaceCount()} type='icon'>
+            <img src={CloseIcon}></img>
+          </Button>
+          <span className='count'>{count}</span>
+        </>
+      );
+    }
+  };
+
   return (
     <li className='product-item'>
       <div className='image-container'>
-        {count !== 0 && (
-          <>
-            <Button onClick={() => decreaceCount()} type='icon'>
-              <img src={CloseIcon}></img>
-            </Button>
-            <span className='count'>{count}</span>
-          </>
-        )}
+        {handleDisplayControlls()}
         <img
           height='100px'
           alt={product.name + ' picture'}
           className={inStock ? 'image' : 'image-gray'}
           onClick={() => {
-            if (inStock) increaceCount();
+            if (inStock && !edit) increaceCount();
           }}
           src={product.image}
         ></img>
       </div>
       <span className='name'>{product.name}</span>
-      <span className='price'>{product.price} €</span>
+      {!edit && <span className='price'>{product.price} €</span>}
+      {edit && (
+        <form className='edit-form'>
+          <label>
+            amount:
+            <input value={product.amount} type='text' name='name' />
+          </label>
+          <input type='save' value='Submit' />
+        </form>
+      )}
     </li>
   );
 }
