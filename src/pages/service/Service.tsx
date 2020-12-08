@@ -31,6 +31,7 @@ export default function Service() {
       setClothesData(clothes);
     });
   }, []);
+
   return (
     <Container>
       <Header title='Service' description='Click on the products picture to add it on the bill.'>
@@ -41,7 +42,7 @@ export default function Service() {
       <ProductList data={foodData} title='food' theme='#E3FCFF'></ProductList>
       <ProductList data={clothesData} title='clothes' theme='#E3FFF3'></ProductList>
       {displayModal && <CheckoutModal closeModal={() => setDisplayModal(false)} />}
-      <Footer onCheckout={() => setDisplayModal(true)}></Footer>
+      <Footer onReset={() => localStorage.clear()} onCheckout={() => setDisplayModal(true)}></Footer>
     </Container>
   );
 }

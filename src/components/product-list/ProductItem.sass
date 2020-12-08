@@ -1,15 +1,15 @@
-@import "../../sass/_variables";
-  
-.product-item 
+@import "../../sass/_variables"
+
+.product-item
   display: flex
   flex-direction: column
   align-items: center
   width: 100px
   margin: 1rem 2rem 1rem 2rem
-  
-  .image-container 
+
+  .image-container
     position: relative
-    Button 
+    & Button
       position: absolute
       top: 0
       right: 0
@@ -31,11 +31,26 @@
       z-index: 1
     .image
       cursor: pointer
-      &-gray 
+      &-gray
         filter: grayscale(1)
         cursor: default
+  .edit-form
+    display: flex
+    flex-direction: column
+    align-items: center
+    .form-submit
+      background: none
+      border: none
+      color: $primary
+      margin-top: 0.5rem
 
-    
+    .input-lable
+      display: flex
+      justify-content: center
+      .input
+        width: 1.5rem
+        text-align: center
+        margin-left: 0.25rem
   .name, .price
     font-size: 1.12rem
     color: $text-dark

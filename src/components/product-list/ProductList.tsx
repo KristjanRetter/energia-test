@@ -7,9 +7,10 @@ interface ProductListProps {
   theme?: string;
   data: any;
   title: string;
+  edit?: boolean;
 }
 
-export default function ProductList({ theme, title, data }: ProductListProps) {
+export default function ProductList({ theme, title, data, edit }: ProductListProps) {
   const selectedItemsList = JSON.parse(localStorage.getItem('counts') || '[]');
 
   useEffect(() => {
@@ -30,7 +31,7 @@ export default function ProductList({ theme, title, data }: ProductListProps) {
       <h3 className='product-list-title'>{title}</h3>
       <ul className='product-list' style={{ background: theme }}>
         {data.map((food: any) => (
-          <ProductItem type={title} key={food.id} product={addCount(food)} />
+          <ProductItem edit={edit} type={title} key={food.id} product={addCount(food)} />
         ))}
       </ul>
     </>

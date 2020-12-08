@@ -8,17 +8,17 @@ import * as API from '../../api';
 interface ProductItem {
   product: any;
   type: string;
+  edit?: boolean;
 }
 
-export default function ProductItem({ product, type }: ProductItem) {
+export default function ProductItem({ product, type, edit }: ProductItem) {
   const selectedItemsList = JSON.parse(localStorage.getItem('counts') || '');
   const [count, setCount] = useState(product.count || 0);
   const [inStock, setInStock] = useState(true);
+  const [amount, setAmount] = useState(product.amount);
 
   const currentIndexStorage = selectedItemsList.findIndex((x: any) => x.id === product.id);
   const { total, setTotal } = useContext(AppContext);
-
-  const edit = true;
 
   useEffect(() => {
     setInStock(count < product.amount);
@@ -46,23 +46,26 @@ export default function ProductItem({ product, type }: ProductItem) {
     setCount(count - 1);
   };
 
-  const handleDisplayControlls = () => {
-    if (count !== 0 && !edit) {
-      return (
-        <>
-          <Button onClick={() => decreaceCount()} type='icon'>
-            <img src={CloseIcon}></img>
-          </Button>
-          <span className='count'>{count}</span>
-        </>
-      );
-    }
+  const handleSubmit = (event: any) => {
+    event.preventDefault();
+    const doc = {
+      ...product,
+      amount: amount,
+    };
+    API.setAmount(product.type, product.id, doc);
   };
 
   return (
     <li className='product-item'>
       <div className='image-container'>
-        {handleDisplayControlls()}
+        {count !== 0 && !edit && (
+          <>
+            <Button onClick={() => decreaceCount()} type='icon'>
+              <img src={CloseIcon}></img>
+            </Button>
+            <span className='count'>{count}</span>
+          </>
+        )}
         <img
           height='100px'
           alt={product.name + ' picture'}
@@ -73,15 +76,15 @@ export default function ProductItem({ product, type }: ProductItem) {
           src={product.image}
         ></img>
       </div>
+
       <span className='name'>{product.name}</span>
       {!edit && <span className='price'>{product.price} €</span>}
       {edit && (
-        <form className='edit-form'>
-          <label>
-            amount:
-            <input value={product.amount} type='text' name='name' />
+        <form onSubmit={() => handleSubmit(event)} className='edit-form'>
+          <label className='input-lable'>
+            amount: <input className='input' value={amount} onChange={event => setAmount(event.target.value)} type='text' name='name' />
           </label>
-          <input type='save' value='Submit' />
+          <input className='form-submit' type='submit' value='Save' />
         </form>
       )}
     </li>
