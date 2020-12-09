@@ -12,7 +12,7 @@ interface ProductItem {
 }
 
 export default function ProductItem({ product, type, edit }: ProductItem) {
-  const { total, setTotal, setSelectedProducts, selectedProducts } = useContext(AppContext);
+  const { total, setTotal, setSelectedProducts, selectedProducts, getAllProducts } = useContext(AppContext);
   const [count, setCount] = useState(product.count || 0);
   const [inStock, setInStock] = useState(true);
   const [first, setFirst] = useState(true);
@@ -65,7 +65,8 @@ export default function ProductItem({ product, type, edit }: ProductItem) {
       ...product,
       amount: amount,
     };
-    API.setAmount(product.type, product.id, doc);
+
+    API.setAmount(product.type, product.id, doc).then(() => getAllProducts());
   };
 
   return (

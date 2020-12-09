@@ -9,13 +9,18 @@ import { AppContext } from '../../common/AppContext';
 import { Link } from 'react-router-dom';
 
 export default function Service() {
-  const { foodData, clothesData, setTotal, getAllProducts } = useContext(AppContext);
+  const { foodData, clothesData, setTotal, getAllProducts, setSelectedProducts, total } = useContext(AppContext);
   const [displayModal, setDisplayModal] = useState(false);
 
   useEffect(() => {
-    setTotal(JSON.parse(localStorage.getItem('total') || '0'));
     getAllProducts();
   }, []);
+
+  const reset = () => {
+    setTotal(0);
+    setSelectedProducts([]);
+    getAllProducts();
+  };
 
   return (
     <Container>
@@ -27,7 +32,14 @@ export default function Service() {
       <ProductList data={foodData} title='food' theme='#E3FCFF'></ProductList>
       <ProductList data={clothesData} title='clothes' theme='#E3FFF3'></ProductList>
       {displayModal && <CheckoutModal closeModal={() => setDisplayModal(false)} />}
-      <Footer onReset={() => localStorage.clear()} onCheckout={() => setDisplayModal(true)}></Footer>
+      <Footer total={total}>
+        <Button type='danger' onClick={() => reset()}>
+          Reset
+        </Button>
+        <Button disabled={total === 0} onClick={() => setDisplayModal(true)}>
+          Checkout
+        </Button>
+      </Footer>
     </Container>
   );
 }

@@ -25,16 +25,24 @@
   span
     display: block
   .content
+    height: 30rem
+
     background: white
     padding: 2rem
     border-radius: 16px
     width: 100%
     max-width: 40rem
+    display: flex
+    flex-direction: column
+    justify-content: space-between
+    .qrcode
+      display: flex
+      flex-direction: column
+      align-items: flex-end
     .title
       margin: 0
 
     .buttons
-      margin-top: 4rem
       display: flex
       justify-content: flex-end
       & Button:first-child

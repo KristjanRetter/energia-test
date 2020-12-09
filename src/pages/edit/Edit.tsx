@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Button from '../../components/button/Button';
 import Container from '../../components/container/Container';
@@ -7,7 +7,12 @@ import ProductList from '../../components/product-list/ProductList';
 import { AppContext } from '../../common/AppContext';
 
 export default function Edit() {
-  const { setFoodData, foodData, selectedProducts, clothesData, setClothesData, setTotal } = useContext(AppContext);
+  const { getAllProducts, setFoodData, foodData, selectedProducts, clothesData, setClothesData, setTotal } = useContext(AppContext);
+
+  useEffect(() => {
+    getAllProducts();
+  }, []);
+
   return (
     <Container>
       <Header title='Edit' description='Here you can change the amount of available products.'>

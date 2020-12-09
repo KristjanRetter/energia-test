@@ -4,7 +4,7 @@ import * as API from './api';
 const initialState = {
   foodData: [],
   clothesData: [],
-  total: 0,
+  total: JSON.parse(localStorage.getItem('total') || '0'),
   selectedProducts: JSON.parse(localStorage.getItem('counts') || '[]'),
 };
 

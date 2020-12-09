@@ -4,6 +4,7 @@ import { AppProvider } from './common/AppContext';
 import Service from './pages/service/Service';
 import { BrowserRouter as Router, Switch, Route, Link, useRouteMatch, useParams } from 'react-router-dom';
 import Edit from './pages/edit/Edit';
+import Receipt from './pages/receipt/Receipt';
 
 function App() {
   return (
@@ -11,6 +12,9 @@ function App() {
       <AppProvider>
         <Router>
           <Switch>
+            <Route path='/receipt/:id'>
+              <Receipt></Receipt>
+            </Route>
             <Route path='/edit'>
               <Edit></Edit>
             </Route>
