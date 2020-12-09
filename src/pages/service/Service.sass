@@ -1,0 +1,15 @@
+.footer-buttons
+  display: flex
+  justify-content: space-between
+  Button:last-child
+    margin-left: 1rem
+  @media only screen and (max-width: 524px)
+    flex-direction: column-reverse
+    Button
+      margin-bottom: 0.5rem 
+    Button:last-child
+      margin-left: 0
+    .right-buttons
+      display: flex
+      flex-direction: column-reverse
+    

@@ -7,10 +7,13 @@ import CheckoutModal from './components/checkout-modal/CheckoutModal';
 import Footer from './components/footer/Footer';
 import { AppContext } from '../../common/AppContext';
 import { Link } from 'react-router-dom';
+import ReturnPurchaseModal from './components/return-purchase-modal/ReturnPurchaseModal';
+import './Service.sass';
 
 export default function Service() {
   const { foodData, clothesData, setTotal, getAllProducts, setSelectedProducts, total } = useContext(AppContext);
-  const [displayModal, setDisplayModal] = useState(false);
+  const [displayCheckoutModal, setDisplayCheckoutModal] = useState(false);
+  const [displayReturnPurchaseModal, setDisplayReturnPurchaseModal] = useState(false);
 
   useEffect(() => {
     getAllProducts();
@@ -29,16 +32,24 @@ export default function Service() {
           <Button type='secondary'>Edit</Button>
         </Link>
       </Header>
-      <ProductList data={foodData} title='food' theme='#E3FCFF'></ProductList>
-      <ProductList data={clothesData} title='clothes' theme='#E3FFF3'></ProductList>
-      {displayModal && <CheckoutModal closeModal={() => setDisplayModal(false)} />}
+      <ProductList data={foodData} title='food' theme='#E3FFF3'></ProductList>
+      <ProductList data={clothesData} title='clothes' theme='#E3FCFF'></ProductList>
+      {displayCheckoutModal && <CheckoutModal closeModal={() => setDisplayCheckoutModal(false)} />}
+      {displayReturnPurchaseModal && <ReturnPurchaseModal closeModal={() => setDisplayReturnPurchaseModal(false)} />}
       <Footer total={total}>
-        <Button type='danger' onClick={() => reset()}>
-          Reset
-        </Button>
-        <Button disabled={total === 0} onClick={() => setDisplayModal(true)}>
-          Checkout
-        </Button>
+        <div className='footer-buttons'>
+          <Button type='secondary' onClick={() => reset()}>
+            Return purchase
+          </Button>
+          <div className='right-buttons'>
+            <Button type='danger' onClick={() => reset()}>
+              Reset
+            </Button>
+            <Button disabled={total === 0} onClick={() => setDisplayCheckoutModal(true)}>
+              Checkout
+            </Button>
+          </div>
+        </div>
       </Footer>
     </Container>
   );

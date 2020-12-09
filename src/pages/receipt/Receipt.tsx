@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './Receipt.sass';
-import { ReceiptTemplate } from '../service/components/checkout-modal/ReceiptTemplate';
+import { ReceiptTemplate } from '../return-purchase/ReceiptTemplate';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import { useParams } from 'react-router-dom';
 import { getDocument } from '../../common/api';

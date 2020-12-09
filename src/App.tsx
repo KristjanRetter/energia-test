@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState } from 'react';
+import React from 'react';
 import './App.sass';
 import { AppProvider } from './common/AppContext';
 import Service from './pages/service/Service';
@@ -22,7 +22,6 @@ function App() {
             <Route path='/return-purchase'>
               <ReturnPurchase></ReturnPurchase>
             </Route>
-
             <Route path='/'>
               <Service></Service>
             </Route>

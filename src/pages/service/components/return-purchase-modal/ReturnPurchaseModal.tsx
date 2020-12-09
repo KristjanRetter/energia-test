@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { setAmount } from '../../../../common/api';
 import Button from '../../../../components/button/Button';
 import { AppContext } from '../../../../common/AppContext';
-import './CheckoutModal.sass';
+import './ReturnPurchaseModal.sass';
 import ReactPDF from '@react-pdf/renderer';
 import { ReceiptTemplate } from '../../../return-purchase/ReceiptTemplate';
 import { nanoid } from 'nanoid';
@@ -15,7 +15,7 @@ interface CheckoutModalProps {
   submit?: () => void;
 }
 
-export default function CheckoutModal({ closeModal, submit }: CheckoutModalProps) {
+export default function ReturnPurchaseModal({ closeModal, submit }: CheckoutModalProps) {
   const { selectedProducts, total, setTotal, getAllProducts, setSelectedProducts } = useContext(AppContext);
   const [cashIn, setCashIn] = useState(0);
   const [receiptId, setReceiptId] = useState('');
