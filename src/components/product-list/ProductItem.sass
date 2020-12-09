@@ -19,7 +19,11 @@
       top: 0
       right: 0
       z-index: 1
-
+      @media only screen and (max-width: 524px)
+        right: -0.5rem
+        img
+          width: 1.2rem
+          height: 1.2rem
     .count
       position: absolute
       bottom: 0
@@ -34,6 +38,10 @@
       color: $text-light
       font-weight: bold
       z-index: 1
+      @media only screen and (max-width: 524px)
+        width: 1.1rem
+        height: 1.1rem
+        font-size: 0.8rem
     .image
       cursor: pointer
       @media only screen and (max-width: 524px)
