@@ -5,6 +5,7 @@ import Service from './pages/service/Service';
 import { BrowserRouter as Router, Switch, Route, Link, useRouteMatch, useParams } from 'react-router-dom';
 import Edit from './pages/edit/Edit';
 import Receipt from './pages/receipt/Receipt';
+import ReturnPurchase from './pages/return-purchase/ReturnPurchase';
 
 function App() {
   return (
@@ -12,11 +13,14 @@ function App() {
       <AppProvider>
         <Router>
           <Switch>
-            <Route path='/receipt/:id'>
-              <Receipt></Receipt>
-            </Route>
             <Route path='/edit'>
               <Edit></Edit>
+            </Route>
+            <Route path='/return-purchase'>
+              <ReturnPurchase></ReturnPurchase>
+            </Route>
+            <Route path='/receipt/:id'>
+              <Receipt></Receipt>
             </Route>
             <Route path='/'>
               <Service></Service>

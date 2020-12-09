@@ -85,8 +85,7 @@ export default function CheckoutModal({ closeModal, submit }: CheckoutModalProps
           <div className='qrcode'>
             {receiptId ? (
               <>
-                <QRCode value='http://facebook.github.io/react/' />
-                <Link to={`/receipt/${receiptId}`}>Receipt link</Link>
+                <QRCode value={`https://energia-test.netlify.app/receipt/${receiptId}`} />
               </>
             ) : (
               <Button disabled={cashIn < total} onClick={() => createReceipt()}>
