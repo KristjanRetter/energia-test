@@ -13,15 +13,16 @@ function App() {
       <AppProvider>
         <Router>
           <Switch>
+            <Route path='/receipt/:id'>
+              <Receipt></Receipt>
+            </Route>
             <Route path='/edit'>
               <Edit></Edit>
             </Route>
             <Route path='/return-purchase'>
               <ReturnPurchase></ReturnPurchase>
             </Route>
-            <Route path='/receipt/:id'>
-              <Receipt></Receipt>
-            </Route>
+
             <Route path='/'>
               <Service></Service>
             </Route>

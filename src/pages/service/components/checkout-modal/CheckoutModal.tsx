@@ -85,7 +85,7 @@ export default function CheckoutModal({ closeModal, submit }: CheckoutModalProps
           <div className='qrcode'>
             {receiptId ? (
               <>
-                <QRCode value={`https://energia-test.netlify.app/receipt/${receiptId}`} />
+                <QRCode value={`https://energia-test.netlify.app/`} />
               </>
             ) : (
               <Button disabled={cashIn < total} onClick={() => createReceipt()}>
@@ -108,3 +108,4 @@ export default function CheckoutModal({ closeModal, submit }: CheckoutModalProps
     </>
   );
 }
+//receipt/${receiptId}
