@@ -1,8 +1,8 @@
 import React from 'react';
-import Button from '../../button/Button';
-import Overlay from '../../overlay/Overlay';
+import Button from '../button/Button';
+import Overlay from '../overlay/Overlay';
 import './Modal.sass';
-import CloseIcon from '../../../assets/close-icon.svg';
+import CloseIcon from '../../assets/close-icon.svg';
 
 interface ModalProps {
   children: React.ReactNode;

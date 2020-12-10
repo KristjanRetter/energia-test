@@ -4,7 +4,7 @@ import Button from '../../../../components/button/Button';
 import { AppContext } from '../../../../common/AppContext';
 import './CheckoutModal.sass';
 import { nanoid } from 'nanoid';
-import Modal from '../../../../components/container/modal/Modal';
+import Modal from '../../../../components/modal/Modal';
 import QRCode from 'qrcode.react';
 import { Product } from '../../../../typings/Product';
 

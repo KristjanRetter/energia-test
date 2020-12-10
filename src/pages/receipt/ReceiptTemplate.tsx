@@ -1,6 +1,6 @@
 import React from 'react';
 import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
-import { OrderReceipt } from '../../typings/Receipt';
+import { OrderReceipt } from '../../typings/OrderReceipt';
 import { Product } from '../../typings/Product';
 
 interface OrderReceiptTemplateProps {
@@ -45,13 +45,13 @@ export const ReceiptTemplate = ({ data }: OrderReceiptTemplateProps): React.Func
         <Text>{data.date}</Text>
       </View>
       <View style={styles.section}>
-        <Text>id: {data.id}</Text>
+        <Text>Id: {data.id}</Text>
       </View>
       <View style={styles.section}>
-        <Text>company: {data.company}</Text>
+        <Text>Company: {data.company}</Text>
       </View>
       <View style={styles.section}>
-        <Text>products:</Text>
+        <Text>Products:</Text>
         {data.products.map((product: Product) => (
           <Text style={styles.product} key={product.id}>{`${product.count} ${product.name} ${product.price}€`}</Text>
         ))}

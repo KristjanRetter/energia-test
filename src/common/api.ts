@@ -1,7 +1,7 @@
 import { db } from './firebase';
 import { QuerySnapshot, DocumentData, DocumentSnapshot } from '@firebase/firestore-types';
 import { Product } from '../typings/Product';
-import { OrderReceipt } from '../typings/Receipt';
+import { OrderReceipt } from '../typings/OrderReceipt';
 
 type CollectionType = 'food' | 'clothes' | 'receipt';
 

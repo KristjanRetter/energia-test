@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import './Receipt.sass';
-import { ReceiptTemplate } from '../return-purchase/ReceiptTemplate';
+import { ReceiptTemplate } from './ReceiptTemplate';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import { useParams } from 'react-router-dom';
 import { getDocument } from '../../common/api';
 import Button from '../../components/button/Button';
-import { OrderReceipt } from '../../typings/Receipt';
+import { OrderReceipt } from '../../typings/OrderReceipt';
 
 export default function Receipt(): React.FunctionComponentElement<unknown> {
   const { id }: { id: string } = useParams();

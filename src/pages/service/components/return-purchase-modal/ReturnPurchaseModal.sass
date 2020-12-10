@@ -1,46 +1,41 @@
 @import "../../../../sass/_variables"
 
-@import "../../../../sass/_variables"
-
 .return-purchase
   display: flex
   flex-direction: column
   justify-content: space-between
   height: 100%
-
-.return-purchase-content
-  display: flex
-  justify-content: space-between
-  @media only screen and (max-width: 524px)
-    flex-direction: column-reverse
-  span
-    display: block
-  .col-1
-    ul
-      list-style: none
-      padding: 0
-      margin: 0
-      max-height: 6rem
-      overflow-y: auto
-      overflow-x: hidden
-      margin-bottom: 1rem
-      max-width: 13rem
-  .col-2
-    input
-      border: none
-      border-bottom: 2px solid $text-dark
-      font-size: 1.5rem
-      width: 100%
-      @media only screen and (max-width: 524px)
+  .return-purchase-content
+    display: flex
+    justify-content: space-between
+    @media only screen and (max-width: 524px)
+      flex-direction: column-reverse
+    span
+      display: block
+    .col-1
+      ul
+        list-style: none
+        padding: 0
+        margin: 0
+        max-height: 6rem
+        overflow-y: auto
+        overflow-x: hidden
         margin-bottom: 1rem
-
-      &:focus
-        outline: none
-
-.return-purchase-button
-  margin-top: 1rem
-  display: flex
-  justify-content: flex-end
-  align-items: flex-end
-  @media only screen and (max-width: 524px)
-    margin-bottom: 1rem
+        max-width: 13rem
+    .col-2
+      input
+        border: none
+        border-bottom: 2px solid $text
+        font-size: 1.5rem
+        width: 100%
+        @media only screen and (max-width: 524px)
+          margin-bottom: 1rem
+        &:focus
+          outline: none
+  
+  .return-purchase-button
+    margin-top: 1rem
+    display: flex
+    justify-content: flex-end
+    @media only screen and (max-width: 524px)
+      margin-bottom: 1rem

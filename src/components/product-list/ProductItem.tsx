@@ -17,14 +17,11 @@ export default function ProductItem({ product, edit }: ProductItemProps): React.
   const [count, setCount] = useState(product.count || 0);
   const [inStock, setInStock] = useState(true);
   const [first, setFirst] = useState(true);
-
   const [amount, setAmount] = useState(product.amount);
-
   const productLocalStorageIndex = selectedProducts.findIndex((x: Product) => x.id === product.id);
 
   useEffect(() => {
     setInStock(count < product.amount);
-
     if (!edit || !first) {
       const isProductSelected = productLocalStorageIndex !== -1;
       if (edit) return;
@@ -65,6 +62,7 @@ export default function ProductItem({ product, edit }: ProductItemProps): React.
     setTotal(total - product.price);
     setCount(count - 1);
   };
+
   // eslint-disable-next-line
   const updateAmount = (event: React.ChangeEvent<any>) => {
     event.preventDefault();

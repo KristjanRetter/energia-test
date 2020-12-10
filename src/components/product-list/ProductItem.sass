@@ -9,11 +9,8 @@
   @media only screen and (max-width: 524px)
     margin: 0.5rem 1rem 0.5rem 1rem
 
-  
-
   .image-container
     position: relative
-    media
     & Button
       position: absolute
       top: 0
@@ -21,9 +18,11 @@
       z-index: 1
       @media only screen and (max-width: 524px)
         right: -0.5rem
+
         img
           width: 1.2rem
           height: 1.2rem
+
     .count
       position: absolute
       bottom: 0
@@ -35,13 +34,14 @@
       display: flex
       justify-content: center
       align-items: center
-      color: $text-light
+      color: $contrast
       font-weight: bold
       z-index: 1
       @media only screen and (max-width: 524px)
         width: 1.1rem
         height: 1.1rem
         font-size: 0.8rem
+        
     .image
       cursor: pointer
       @media only screen and (max-width: 524px)
@@ -72,18 +72,18 @@
         width: 1.5rem
         text-align: center
         margin-left: 0.25rem
+
         &::-webkit-outer-spin-button,
         &::-webkit-inner-spin-button 
           -webkit-appearance: none
           margin: 0
+
         &[type=number] 
           -moz-appearance: textfield
-      
-        
 
 input
   .name, .price
     font-size: 1.12rem
-    color: $text-dark
+    color: $text
 
 

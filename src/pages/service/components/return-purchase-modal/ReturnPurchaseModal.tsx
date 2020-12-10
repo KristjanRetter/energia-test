@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import Button from '../../../../components/button/Button';
 import './ReturnPurchaseModal.sass';
-import Modal from '../../../../components/container/modal/Modal';
+import Modal from '../../../../components/modal/Modal';
 import { getDocument } from '../../../../common/api';
-import { OrderReceipt } from '../../../../typings/Receipt';
+import { OrderReceipt } from '../../../../typings/OrderReceipt';
 import { Product } from '../../../../typings/Product';
 
 interface ReturnPurchaseModal {
