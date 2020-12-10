@@ -72,6 +72,16 @@
         width: 1.5rem
         text-align: center
         margin-left: 0.25rem
+        &::-webkit-outer-spin-button,
+        &::-webkit-inner-spin-button 
+          -webkit-appearance: none
+          margin: 0
+        &[type=number] 
+          -moz-appearance: textfield
+      
+        
+
+input
   .name, .price
     font-size: 1.12rem
     color: $text-dark

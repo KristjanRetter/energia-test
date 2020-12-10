@@ -1,21 +1,18 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { setAmount } from '../../../../common/api';
 import Button from '../../../../components/button/Button';
 import { AppContext } from '../../../../common/AppContext';
 import './CheckoutModal.sass';
-import ReactPDF from '@react-pdf/renderer';
-import { ReceiptTemplate } from '../../../return-purchase/ReceiptTemplate';
 import { nanoid } from 'nanoid';
-import { Link } from 'react-router-dom';
+import Modal from '../../../../components/container/modal/Modal';
 import QRCode from 'qrcode.react';
-import Overlay from '../../../../components/overlay/Overlay';
 
 interface CheckoutModalProps {
-  closeModal: () => void;
+  closeCheckoutModal: () => void;
   submit?: () => void;
 }
 
-export default function CheckoutModal({ closeModal, submit }: CheckoutModalProps) {
+export default function CheckoutModal({ closeCheckoutModal, submit }: CheckoutModalProps) {
   const { selectedProducts, total, setTotal, getAllProducts, setSelectedProducts } = useContext(AppContext);
   const [cashIn, setCashIn] = useState(0);
   const [receiptId, setReceiptId] = useState('');
@@ -29,83 +26,59 @@ export default function CheckoutModal({ closeModal, submit }: CheckoutModalProps
       }
     });
     setTotal(0);
-    localStorage.clear();
     setSelectedProducts([]);
 
-    if (!selectedProducts) {
-      getAllProducts();
-    }
-    closeModal();
+    getAllProducts();
+    closeCheckoutModal();
   };
-
-  useEffect(() => {
-    const newDate = new Date();
-    // ReactPDF.render(, `/example.pdf`);
-  }, []);
 
   const createReceipt = () => {
     const id = nanoid();
-    setReceiptId(id);
-
-    console.log(id);
     const doc = { date: new Date().toUTCString(), id: id, company: 'Epick sale', products: selectedProducts, total: total };
-    if (id) {
-      setAmount('receipt', id, doc);
-    }
+    setReceiptId(id);
+    setAmount('receipt', id, doc);
   };
-  const renderPdf = () => {
-    return JSON.stringify({});
-  };
+
   return (
     <>
-      <Overlay>
-        <div className='content'>
+      <Modal closeModal={() => closeCheckoutModal()}>
+        <div className='checkout-modal'>
           <div>
-            <h2 className='title'>Checkout</h2>
-            <div className='columns'>
+            <h2 className='checkout-title'>Checkout</h2>
+            <div className='checkout-content'>
               <div className='col-1'>
                 <ul>
                   {selectedProducts.map((item: any) => {
                     return item.count && <li key={item.id}>{`${item.count} ${item.name} ${item.price}€`}</li>;
                   })}
                 </ul>
-
-                <span>Total: {total}€</span>
-                {receiptId && <span>receipt Id: {receiptId}</span>}
+                <span className='checkout-total'>Total: {total}€</span>
+                {receiptId && <span>Receipt Id: {receiptId}</span>}
               </div>
-
               <div className='col-2'>
                 <form onSubmit={handleSubmit}>
-                  <input autoFocus type='number' placeholder='cash in' onChange={(event: any) => setCashIn(event.target.value)} />
+                  <input autoFocus type='number' placeholder='Cash in' onChange={(event: any) => setCashIn(event.target.value)} />
                 </form>
                 {cashIn > total && <span className='cash-back'>Cash back: {Math.abs(total - cashIn)} €</span>}
               </div>
             </div>
           </div>
-          <div className='footer'>
-            <div className='qrcode'>
-              {receiptId ? (
-                <>
-                  <QRCode size={200} value={`https://energia-test.netlify.app/receipt/${receiptId}`} />
-                </>
-              ) : (
-                <Button disabled={cashIn < total} onClick={() => createReceipt()}>
-                  Generate receipt
-                </Button>
-              )}
-            </div>
-
-            <div className='buttons'>
-              <Button type='secondary' onClick={() => closeModal()}>
-                Back
+          <div className='checkout-buttons'>
+            {receiptId ? (
+              <div className='qrcode'>
+                <QRCode size={200} value={`https://energia-test.netlify.app/receipt/${receiptId}`} />
+              </div>
+            ) : (
+              <Button disabled={cashIn < total} onClick={() => createReceipt()}>
+                Receipt
               </Button>
-              <Button disabled={cashIn < total} onClick={() => handleSubmit({})}>
-                Done
-              </Button>
-            </div>
+            )}
+            <Button disabled={cashIn < total} onClick={() => handleSubmit({})}>
+              Done
+            </Button>
           </div>
         </div>
-      </Overlay>
+      </Modal>
     </>
   );
 }

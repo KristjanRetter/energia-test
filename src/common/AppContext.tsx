@@ -8,6 +8,11 @@ const initialState = {
   selectedProducts: JSON.parse(localStorage.getItem('counts') || '[]'),
 };
 
+const formatNumber = (num: any) => {
+  const formatedNumString = num.toFixed(2);
+  return Number(formatedNumString);
+};
+
 const reducer = (state: any, action: any) => {
   switch (action.type) {
     case 'SET_FOOD_DATA':
@@ -19,7 +24,7 @@ const reducer = (state: any, action: any) => {
       return { ...state, selectedProducts: action.value };
     case 'SET_TOTAL':
       localStorage.setItem('total', JSON.stringify(action.value));
-      return { ...state, total: action.value };
+      return { ...state, total: formatNumber(action.value) };
     default:
       return state;
   }
@@ -54,6 +59,7 @@ export const AppProvider = ({ children }: any) => {
   };
 
   const getAllProducts = () => {
+    console.log('set all data');
     API.getAllFoods().then((allfoods: any) => {
       const foods = allfoods.docs.map((food: any) => addCount(food.data()));
       dispatch({ type: 'SET_FOOD_DATA', value: foods });

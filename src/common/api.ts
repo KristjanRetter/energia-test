@@ -1,10 +1,12 @@
-import { db } from './firebase';
+import { Product } from '../typings/Product';
+import { db, fire } from './firebase';
+import firebase from 'firebase';
 
 export const getAllFoods = () => {
   return db.collection('food').get();
 };
 
-export const getAllClothes = () => {
+export const getAllClothes = (): Promise<firebase.firestore.QuerySnapshot<firebase.firestore.DocumentData>> => {
   return db.collection('clothes').get();
 };
 

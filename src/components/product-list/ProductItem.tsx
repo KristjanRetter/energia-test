@@ -22,6 +22,7 @@ export default function ProductItem({ product, type, edit }: ProductItem) {
   const productLocalStorageIndex = selectedProducts.findIndex((x: any) => x.id === product.id);
 
   useEffect(() => {
+    console.log('coun');
     setInStock(count < product.amount);
 
     if (!edit || !first) {
@@ -42,6 +43,10 @@ export default function ProductItem({ product, type, edit }: ProductItem) {
     }
     setFirst(false);
   }, [count]);
+
+  useEffect(() => {
+    setInStock(count < product.amount);
+  }, [product]);
 
   useEffect(() => {
     if (selectedProducts.length === 0) {
@@ -65,8 +70,10 @@ export default function ProductItem({ product, type, edit }: ProductItem) {
       ...product,
       amount: amount,
     };
-
-    API.setAmount(product.type, product.id, doc).then(() => getAllProducts());
+    delete doc.count;
+    API.setAmount(product.type, product.id, doc).then(() => {
+      getAllProducts();
+    });
   };
 
   return (
@@ -82,6 +89,7 @@ export default function ProductItem({ product, type, edit }: ProductItem) {
         )}
         <img
           height='100px'
+          width='100px'
           alt={product.name + ' picture'}
           className={inStock ? 'image' : 'image-gray'}
           onClick={() => {
@@ -96,7 +104,7 @@ export default function ProductItem({ product, type, edit }: ProductItem) {
       {edit && (
         <form onSubmit={() => handleSubmit(event)} className='edit-form'>
           <label className='input-lable'>
-            amount: <input className='input' value={amount} onChange={event => setAmount(event.target.value)} type='text' name='name' />
+            amount: <input type='number' className='input' value={amount} onChange={event => setAmount(event.target.value)} />
           </label>
           <input className='form-submit' type='submit' value='Save' />
         </form>

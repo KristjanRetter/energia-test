@@ -32,13 +32,13 @@ export default function Service() {
           <Button type='secondary'>Edit</Button>
         </Link>
       </Header>
-      <ProductList data={foodData} title='food' theme='#E3FFF3'></ProductList>
-      <ProductList data={clothesData} title='clothes' theme='#E3FCFF'></ProductList>
-      {displayCheckoutModal && <CheckoutModal closeModal={() => setDisplayCheckoutModal(false)} />}
-      {displayReturnPurchaseModal && <ReturnPurchaseModal closeModal={() => setDisplayReturnPurchaseModal(false)} />}
+      <ProductList data={foodData} title='food' theme={{ background: '#E3FFF3', text: '#00fb8f' }}></ProductList>
+      <ProductList data={clothesData} title='clothes' theme={{ background: '#E3FCFF', text: '#00E4FF' }}></ProductList>
+      {displayCheckoutModal && <CheckoutModal closeCheckoutModal={() => setDisplayCheckoutModal(false)} />}
+      {displayReturnPurchaseModal && <ReturnPurchaseModal closeReturnPurchaseModal={() => setDisplayReturnPurchaseModal(false)} />}
       <Footer total={total}>
         <div className='footer-buttons'>
-          <Button type='secondary' onClick={() => reset()}>
+          <Button type='secondary' onClick={() => setDisplayReturnPurchaseModal(true)}>
             Return purchase
           </Button>
           <div className='right-buttons'>

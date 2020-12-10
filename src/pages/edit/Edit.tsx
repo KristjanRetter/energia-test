@@ -20,8 +20,8 @@ export default function Edit() {
           <Button type='secondary'>Service</Button>
         </Link>
       </Header>
-      <ProductList edit={true} data={foodData} title='food' theme='#E3FCFF'></ProductList>
-      <ProductList edit={true} data={clothesData} title='clothes' theme='#E3FFF3'></ProductList>
+      <ProductList edit={true} data={foodData} title='food' theme={{ background: '#E3FFF3', text: '#00fb8f' }}></ProductList>
+      <ProductList edit={true} data={clothesData} title='clothes' theme={{ background: '#E3FCFF', text: '#00E4FF' }}></ProductList>
     </Container>
   );
 }

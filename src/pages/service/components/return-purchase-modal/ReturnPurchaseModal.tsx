@@ -1,111 +1,68 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { setAmount } from '../../../../common/api';
 import Button from '../../../../components/button/Button';
 import { AppContext } from '../../../../common/AppContext';
 import './ReturnPurchaseModal.sass';
-import ReactPDF from '@react-pdf/renderer';
-import { ReceiptTemplate } from '../../../return-purchase/ReceiptTemplate';
 import { nanoid } from 'nanoid';
-import { Link } from 'react-router-dom';
+import Modal from '../../../../components/container/modal/Modal';
 import QRCode from 'qrcode.react';
-import Overlay from '../../../../components/overlay/Overlay';
+import { getDocument } from '../../../../common/api';
 
-interface CheckoutModalProps {
-  closeModal: () => void;
+interface ReturnPurchaseModal {
+  closeReturnPurchaseModal: () => void;
   submit?: () => void;
 }
 
-export default function ReturnPurchaseModal({ closeModal, submit }: CheckoutModalProps) {
+export default function ReturnPurchaseModal({ closeReturnPurchaseModal, submit }: ReturnPurchaseModal) {
   const { selectedProducts, total, setTotal, getAllProducts, setSelectedProducts } = useContext(AppContext);
-  const [cashIn, setCashIn] = useState(0);
-  const [receiptId, setReceiptId] = useState('');
+  const [receiptId, setReceiptId] = useState(null as any);
+  const [receiptData, setReceiptData] = useState(null as any);
 
-  const handleSubmit = (event: any) => {
-    selectedProducts.forEach((each: any) => {
-      if (each.count) {
-        const doc = { ...each, amount: each.amount - each.count };
-        delete doc.count;
-        setAmount(each.type, each.id, doc);
-      }
-    });
-    setTotal(0);
-    localStorage.clear();
-    setSelectedProducts([]);
-
-    if (!selectedProducts) {
-      getAllProducts();
-    }
-    closeModal();
+  const handleSubmit = (): void => {
+    getDocument('receipt', receiptId)
+      .then(receipt => {
+        console.log(receipt);
+        if (receipt.exists) {
+          const response: any = receipt.data();
+          setReceiptData(response);
+        }
+      })
+      .catch(error => console.log(error));
   };
 
-  useEffect(() => {
-    const newDate = new Date();
-    // ReactPDF.render(, `/example.pdf`);
-  }, []);
-
-  const createReceipt = () => {
-    const id = nanoid();
-    setReceiptId(id);
-
-    console.log(id);
-    const doc = { date: new Date().toUTCString(), id: id, company: 'Epick sale', products: selectedProducts, total: total };
-    if (id) {
-      setAmount('receipt', id, doc);
-    }
-  };
-  const renderPdf = () => {
-    return JSON.stringify({});
-  };
   return (
     <>
-      <Overlay>
-        <div className='content'>
+      <Modal closeModal={() => closeReturnPurchaseModal()}>
+        <div className='return-purchase'>
           <div>
-            <h2 className='title'>Checkout</h2>
-            <div className='columns'>
-              <div className='col-1'>
-                <ul>
-                  {selectedProducts.map((item: any) => {
-                    return item.count && <li key={item.id}>{`${item.count} ${item.name} ${item.price}€`}</li>;
-                  })}
-                </ul>
-
-                <span>Total: {total}€</span>
-                {receiptId && <span>receipt Id: {receiptId}</span>}
-              </div>
-
+            <h2 className='return-purchase-title'>Return purchase</h2>
+            <div className='return-purchase-content'>
+              {receiptData && (
+                <div className='col-1'>
+                  <ul>
+                    {receiptData.products.map((item: any) => {
+                      return item.count && <li key={item.id}>{`${item.count} ${item.name} ${item.price}€`}</li>;
+                    })}
+                  </ul>
+                  <span>Total: {receiptData.total}€</span>
+                  <span>receipt Id: {receiptId}</span>
+                </div>
+              )}
               <div className='col-2'>
                 <form onSubmit={handleSubmit}>
-                  <input autoFocus type='number' placeholder='cash in' onChange={(event: any) => setCashIn(event.target.value)} />
+                  <input autoFocus type='text' placeholder='Enter order id' onChange={event => setReceiptId(event.target.value)} />
                 </form>
-                {cashIn > total && <span className='cash-back'>Cash back: {Math.abs(total - cashIn)} €</span>}
               </div>
             </div>
           </div>
-          <div className='footer'>
-            <div className='qrcode'>
-              {receiptId ? (
-                <>
-                  <QRCode size={200} value={`https://energia-test.netlify.app/receipt/${receiptId}`} />
-                </>
-              ) : (
-                <Button disabled={cashIn < total} onClick={() => createReceipt()}>
-                  Generate receipt
-                </Button>
-              )}
-            </div>
 
-            <div className='buttons'>
-              <Button type='secondary' onClick={() => closeModal()}>
-                Back
-              </Button>
-              <Button disabled={cashIn < total} onClick={() => handleSubmit({})}>
-                Done
-              </Button>
-            </div>
+          <div className='return-purchase-button'>
+            <Button disabled={!receiptId} onClick={() => handleSubmit()}>
+              Done
+            </Button>
           </div>
         </div>
-      </Overlay>
+      </Modal>
     </>
   );
 }
