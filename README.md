@@ -5,10 +5,9 @@ Project features a small imaginary sales platform for a coffee shop event.
 ## How to run
 
 To run the project:
+### `Clone the repo`
+### `yarn install`
 ### `yarn start`
-
-To run projects tests:
-### `yarn test`
 
 To run linter:
 ### `yarn lint`
