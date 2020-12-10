@@ -1,20 +1,22 @@
+import { db } from './firebase';
+import { QuerySnapshot, DocumentData, DocumentSnapshot } from '@firebase/firestore-types';
 import { Product } from '../typings/Product';
-import { db, fire } from './firebase';
-import firebase from 'firebase';
+import { OrderReceipt } from '../typings/Receipt';
 
-export const getAllFoods = () => {
+type CollectionType = 'food' | 'clothes' | 'receipt';
+
+export const getAllFoods = (): Promise<QuerySnapshot<DocumentData>> => {
   return db.collection('food').get();
 };
 
-export const getAllClothes = (): Promise<firebase.firestore.QuerySnapshot<firebase.firestore.DocumentData>> => {
+export const getAllClothes = (): Promise<QuerySnapshot<DocumentData>> => {
   return db.collection('clothes').get();
 };
 
-//shange name
-export const setAmount = (type: string, id: string, doc: any) => {
+export const setDocument = (type: CollectionType, id: string, doc: Product | OrderReceipt): Promise<void> => {
   return db.collection(type).doc(id).set(doc);
 };
 
-export const getDocument = (type: string, id: string) => {
+export const getDocument = (type: CollectionType, id: string): Promise<DocumentSnapshot<DocumentData>> => {
   return db.collection(type).doc(id).get();
 };

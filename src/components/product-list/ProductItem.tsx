@@ -3,15 +3,16 @@ import Button from '../button/Button';
 import CloseIcon from '../../assets/close-icon.svg';
 import './ProductItem.sass';
 import { AppContext } from '../../common/AppContext';
-import * as API from '../../common/api';
+import { setDocument } from '../../common/api';
+import { Product } from '../../typings/Product';
 
-interface ProductItem {
-  product: any;
+interface ProductItemProps {
+  product: Product;
   type: string;
   edit?: boolean;
 }
 
-export default function ProductItem({ product, type, edit }: ProductItem) {
+export default function ProductItem({ product, edit }: ProductItemProps): React.FunctionComponentElement<ProductItemProps> {
   const { total, setTotal, setSelectedProducts, selectedProducts, getAllProducts } = useContext(AppContext);
   const [count, setCount] = useState(product.count || 0);
   const [inStock, setInStock] = useState(true);
@@ -19,10 +20,9 @@ export default function ProductItem({ product, type, edit }: ProductItem) {
 
   const [amount, setAmount] = useState(product.amount);
 
-  const productLocalStorageIndex = selectedProducts.findIndex((x: any) => x.id === product.id);
+  const productLocalStorageIndex = selectedProducts.findIndex((x: Product) => x.id === product.id);
 
   useEffect(() => {
-    console.log('coun');
     setInStock(count < product.amount);
 
     if (!edit || !first) {
@@ -42,10 +42,12 @@ export default function ProductItem({ product, type, edit }: ProductItem) {
       setSelectedProducts(selectedProducts);
     }
     setFirst(false);
+    // eslint-disable-next-line
   }, [count]);
 
   useEffect(() => {
     setInStock(count < product.amount);
+    // eslint-disable-next-line
   }, [product]);
 
   useEffect(() => {
@@ -54,24 +56,24 @@ export default function ProductItem({ product, type, edit }: ProductItem) {
     }
   }, [selectedProducts]);
 
-  const increaceCount = () => {
+  const increaceCount = (): void => {
     setTotal(total + product.price);
     setCount(count + 1);
   };
 
-  const decreaceCount = () => {
+  const decreaceCount = (): void => {
     setTotal(total - product.price);
     setCount(count - 1);
   };
-
-  const handleSubmit = (event: any) => {
+  // eslint-disable-next-line
+  const updateAmount = (event: React.ChangeEvent<any>) => {
     event.preventDefault();
     const doc = {
       ...product,
       amount: amount,
     };
     delete doc.count;
-    API.setAmount(product.type, product.id, doc).then(() => {
+    setDocument(product.type, product.id, doc).then(() => {
       getAllProducts();
     });
   };
@@ -102,9 +104,16 @@ export default function ProductItem({ product, type, edit }: ProductItem) {
       <span className='name'>{product.name}</span>
       {!edit && <span className='price'>{product.price} €</span>}
       {edit && (
-        <form onSubmit={() => handleSubmit(event)} className='edit-form'>
+        <form onSubmit={event => updateAmount(event)} className='edit-form'>
           <label className='input-lable'>
-            amount: <input type='number' className='input' value={amount} onChange={event => setAmount(event.target.value)} />
+            amount:{' '}
+            <input
+              type='number'
+              className='input'
+              value={amount}
+              // eslint-disable-next-line
+              onChange={(event: React.ChangeEvent<any>) => setAmount(event.target.value)}
+            />
           </label>
           <input className='form-submit' type='submit' value='Save' />
         </form>

@@ -1,7 +1,12 @@
 import React from 'react';
 import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
+import { OrderReceipt } from '../../typings/Receipt';
+import { Product } from '../../typings/Product';
 
-// Create styles
+interface OrderReceiptTemplateProps {
+  data: OrderReceipt;
+}
+
 const styles = StyleSheet.create({
   page: {
     display: 'flex',
@@ -33,7 +38,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export const ReceiptTemplate = ({ data }: any) => (
+export const ReceiptTemplate = ({ data }: OrderReceiptTemplateProps): React.FunctionComponentElement<OrderReceiptTemplateProps> => (
   <Document>
     <Page size='A4' style={styles.page}>
       <View style={styles.date}>
@@ -47,7 +52,7 @@ export const ReceiptTemplate = ({ data }: any) => (
       </View>
       <View style={styles.section}>
         <Text>products:</Text>
-        {data.products.map((product: any) => (
+        {data.products.map((product: Product) => (
           <Text style={styles.product} key={product.id}>{`${product.count} ${product.name} ${product.price}€`}</Text>
         ))}
       </View>

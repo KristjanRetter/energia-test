@@ -1,30 +1,28 @@
-import React, { useContext, useState } from 'react';
-import { setAmount } from '../../../../common/api';
+import React, { useState } from 'react';
 import Button from '../../../../components/button/Button';
-import { AppContext } from '../../../../common/AppContext';
 import './ReturnPurchaseModal.sass';
-import { nanoid } from 'nanoid';
 import Modal from '../../../../components/container/modal/Modal';
-import QRCode from 'qrcode.react';
 import { getDocument } from '../../../../common/api';
+import { OrderReceipt } from '../../../../typings/Receipt';
+import { Product } from '../../../../typings/Product';
 
 interface ReturnPurchaseModal {
   closeReturnPurchaseModal: () => void;
-  submit?: () => void;
 }
 
-export default function ReturnPurchaseModal({ closeReturnPurchaseModal, submit }: ReturnPurchaseModal) {
-  const { selectedProducts, total, setTotal, getAllProducts, setSelectedProducts } = useContext(AppContext);
-  const [receiptId, setReceiptId] = useState(null as any);
-  const [receiptData, setReceiptData] = useState(null as any);
+export default function ReturnPurchaseModal({
+  closeReturnPurchaseModal,
+}: ReturnPurchaseModal): React.FunctionComponentElement<ReturnPurchaseModal> {
+  const [receiptId, setReceiptId] = useState<string | null>(null);
+  const [receiptData, setReceiptData] = useState<OrderReceipt | null>(null);
 
-  const handleSubmit = (): void => {
+  const returnReceipt = (): void => {
+    if (!receiptId) return;
     getDocument('receipt', receiptId)
       .then(receipt => {
-        console.log(receipt);
         if (receipt.exists) {
-          const response: any = receipt.data();
-          setReceiptData(response);
+          const response = receipt.data();
+          setReceiptData(response as OrderReceipt);
         }
       })
       .catch(error => console.log(error));
@@ -40,7 +38,7 @@ export default function ReturnPurchaseModal({ closeReturnPurchaseModal, submit }
               {receiptData && (
                 <div className='col-1'>
                   <ul>
-                    {receiptData.products.map((item: any) => {
+                    {receiptData.products.map((item: Product) => {
                       return item.count && <li key={item.id}>{`${item.count} ${item.name} ${item.price}€`}</li>;
                     })}
                   </ul>
@@ -49,7 +47,7 @@ export default function ReturnPurchaseModal({ closeReturnPurchaseModal, submit }
                 </div>
               )}
               <div className='col-2'>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={returnReceipt}>
                   <input autoFocus type='text' placeholder='Enter order id' onChange={event => setReceiptId(event.target.value)} />
                 </form>
               </div>
@@ -57,7 +55,7 @@ export default function ReturnPurchaseModal({ closeReturnPurchaseModal, submit }
           </div>
 
           <div className='return-purchase-button'>
-            <Button disabled={!receiptId} onClick={() => handleSubmit()}>
+            <Button disabled={!receiptId} onClick={() => returnReceipt()}>
               Done
             </Button>
           </div>

@@ -2,7 +2,7 @@ export interface Product {
   id: string;
   name: string;
   amount: number;
-  image: URL;
+  image: string;
   price: number;
   type: 'food' | 'clothes';
   count?: number;

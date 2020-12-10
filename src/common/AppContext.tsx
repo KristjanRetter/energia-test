@@ -1,19 +1,38 @@
 import React, { createContext, useEffect, useReducer } from 'react';
-import * as API from './api';
+import { Product } from '../typings/Product';
+import { getAllFoods, getAllClothes } from './api';
+import { DocumentData, QueryDocumentSnapshot } from '@firebase/firestore-types';
 
-const initialState = {
+interface InitialState {
+  foodData: [] | Product[];
+  clothesData: [] | Product[];
+  total: number;
+  selectedProducts: [] | Product[];
+}
+
+const initialState: InitialState = {
   foodData: [],
   clothesData: [],
   total: JSON.parse(localStorage.getItem('total') || '0'),
   selectedProducts: JSON.parse(localStorage.getItem('counts') || '[]'),
 };
 
-const formatNumber = (num: any) => {
+interface Action {
+  // eslint-disable-next-line
+  value: any;
+  type: 'SET_FOOD_DATA' | 'SET_CLOTHES_DATA' | 'SET_SELECTED_PRODUCTS' | 'SET_TOTAL';
+}
+
+interface AppContextProps {
+  children: React.ReactNode;
+}
+
+const formatNumber = (num: number) => {
   const formatedNumString = num.toFixed(2);
   return Number(formatedNumString);
 };
 
-const reducer = (state: any, action: any) => {
+const reducer = (state: InitialState, action: Action) => {
   switch (action.type) {
     case 'SET_FOOD_DATA':
       return { ...state, foodData: action.value };
@@ -30,9 +49,10 @@ const reducer = (state: any, action: any) => {
   }
 };
 
+// eslint-disable-next-line
 export const AppContext = createContext({} as any);
 
-export const AppProvider = ({ children }: any) => {
+export const AppProvider = ({ children }: AppContextProps): React.FunctionComponentElement<AppContextProps> => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const value = {
@@ -41,10 +61,10 @@ export const AppProvider = ({ children }: any) => {
     total: state.total,
     selectedProducts: state.selectedProducts,
     getAllProducts: () => getAllProducts(),
-    setFoodData: (value: any) => dispatch({ type: 'SET_FOOD_DATA', value }),
-    setClothesData: (value: any) => dispatch({ type: 'SET_CLOTHES_DATA', value }),
-    setSelectedProducts: (value: any) => dispatch({ type: 'SET_SELECTED_PRODUCTS', value }),
-    setTotal: (value: any) => dispatch({ type: 'SET_TOTAL', value }),
+    setFoodData: (value: Product[]) => dispatch({ type: 'SET_FOOD_DATA', value }),
+    setClothesData: (value: Product[]) => dispatch({ type: 'SET_CLOTHES_DATA', value }),
+    setSelectedProducts: (value: Product[]) => dispatch({ type: 'SET_SELECTED_PRODUCTS', value }),
+    setTotal: (value: number) => dispatch({ type: 'SET_TOTAL', value }),
   };
 
   useEffect(() => {
@@ -53,19 +73,18 @@ export const AppProvider = ({ children }: any) => {
     }
   }, []);
 
-  const addCount = (product: any) => {
-    const hasCount = value.selectedProducts.find((item: any) => item.id === product.id);
+  const addCount = (product: Product) => {
+    const hasCount = value.selectedProducts.find((selectedProduct: Product) => selectedProduct.id === product.id);
     return hasCount ? { ...product, count: hasCount.count } : product;
   };
 
   const getAllProducts = () => {
-    console.log('set all data');
-    API.getAllFoods().then((allfoods: any) => {
-      const foods = allfoods.docs.map((food: any) => addCount(food.data()));
+    getAllFoods().then(allfoods => {
+      const foods = allfoods.docs.map((food: QueryDocumentSnapshot<DocumentData>) => addCount(food.data() as Product));
       dispatch({ type: 'SET_FOOD_DATA', value: foods });
     });
-    API.getAllClothes().then((allClothes: any) => {
-      const clothes = allClothes.docs.map((clothing: any) => addCount(clothing.data()));
+    getAllClothes().then(allClothes => {
+      const clothes = allClothes.docs.map((clothing: QueryDocumentSnapshot<DocumentData>) => addCount(clothing.data() as Product));
       dispatch({ type: 'SET_CLOTHES_DATA', value: clothes });
     });
   };

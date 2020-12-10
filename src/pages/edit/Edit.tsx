@@ -6,11 +6,12 @@ import Header from '../../components/header/Header';
 import ProductList from '../../components/product-list/ProductList';
 import { AppContext } from '../../common/AppContext';
 
-export default function Edit() {
-  const { getAllProducts, setFoodData, foodData, selectedProducts, clothesData, setClothesData, setTotal } = useContext(AppContext);
+export default function Edit(): React.FunctionComponentElement<unknown> {
+  const { getAllProducts, foodData, clothesData } = useContext(AppContext);
 
   useEffect(() => {
     getAllProducts();
+    // eslint-disable-next-line
   }, []);
 
   return (

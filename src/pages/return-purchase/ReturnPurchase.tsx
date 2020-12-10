@@ -1,26 +1,28 @@
 import React, { useState } from 'react';
 import { getDocument } from '../../common/api';
 import Container from '../../components/container/Container';
+import { Product } from '../../typings/Product';
+import { OrderReceipt } from '../../typings/Receipt';
 
-export default function ReturnPurchase() {
+export default function ReturnPurchase(): React.FunctionComponentElement<unknown> {
   const [orderId, setOrderId] = useState('');
-  const [receiptData, setReceiptData] = useState(null as any);
+  const [receiptData, setReceiptData] = useState<null | OrderReceipt>(null);
 
-  const handleSubmit = (event: any) => {
+  // eslint-disable-next-line
+  const returnPurchaseOrder = (event: React.ChangeEvent<any>): void => {
     event.preventDefault();
     getDocument('receipt', orderId)
       .then(receipt => {
-        console.log(receipt);
         if (receipt.exists) {
-          const response: any = receipt.data();
-          setReceiptData(response);
+          const response = receipt.data();
+          setReceiptData(response as OrderReceipt);
         }
       })
       .catch(error => console.log(error));
   };
   return (
     <Container>
-      <form onSubmit={() => handleSubmit(event)} className='edit-form'>
+      <form onSubmit={event => returnPurchaseOrder(event)} className='edit-form'>
         <label className='input-lable'>
           id:{' '}
           <input
@@ -47,7 +49,7 @@ export default function ReturnPurchase() {
           </li>
           <li>
             <p>products:</p>
-            {receiptData.products.map((product: any) => (
+            {receiptData.products.map((product: Product) => (
               <p key={product.id}>{`${product.count} ${product.name} ${product.price}€`}</p>
             ))}
           </li>

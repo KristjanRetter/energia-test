@@ -10,13 +10,14 @@ import { Link } from 'react-router-dom';
 import ReturnPurchaseModal from './components/return-purchase-modal/ReturnPurchaseModal';
 import './Service.sass';
 
-export default function Service() {
+export default function Service(): React.FunctionComponentElement<unknown> {
   const { foodData, clothesData, setTotal, getAllProducts, setSelectedProducts, total } = useContext(AppContext);
   const [displayCheckoutModal, setDisplayCheckoutModal] = useState(false);
   const [displayReturnPurchaseModal, setDisplayReturnPurchaseModal] = useState(false);
 
   useEffect(() => {
     getAllProducts();
+    // eslint-disable-next-line
   }, []);
 
   const reset = () => {

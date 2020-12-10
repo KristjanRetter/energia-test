@@ -1,7 +1,11 @@
 import React from 'react';
 import './Overlay.sass';
 
-export default function Overlay({ children }: any) {
+interface OverlayProps {
+  children: React.ReactNode;
+}
+
+export default function Overlay({ children }: OverlayProps): React.FunctionComponentElement<OverlayProps> {
   return (
     <>
       <div className='overlay-content'>{children}</div>

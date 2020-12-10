@@ -7,7 +7,7 @@ interface HeaderProps {
   children: ReactChild;
 }
 
-export default function Header({ title, description, children }: HeaderProps) {
+export default function Header({ title, description, children }: HeaderProps): React.FunctionComponentElement<HeaderProps> {
   return (
     <header className='header'>
       <div>

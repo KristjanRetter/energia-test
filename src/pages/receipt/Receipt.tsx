@@ -5,21 +5,22 @@ import { PDFDownloadLink } from '@react-pdf/renderer';
 import { useParams } from 'react-router-dom';
 import { getDocument } from '../../common/api';
 import Button from '../../components/button/Button';
+import { OrderReceipt } from '../../typings/Receipt';
 
-export default function Receipt() {
-  const { id }: any = useParams();
-  const [receiptData, setReceiptData] = useState(null);
+export default function Receipt(): React.FunctionComponentElement<unknown> {
+  const { id }: { id: string } = useParams();
+  const [receiptData, setReceiptData] = useState<OrderReceipt | null>(null);
 
   useEffect(() => {
     getDocument('receipt', id)
       .then(receipt => {
-        console.log(receipt);
         if (receipt.exists) {
-          const response: any = receipt.data();
-          setReceiptData(response);
+          const response = receipt.data();
+          setReceiptData(response as OrderReceipt);
         }
       })
       .catch(error => console.log(error));
+    // eslint-disable-next-line
   }, []);
 
   return (

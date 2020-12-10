@@ -1,33 +1,33 @@
 import React, { useContext, useState } from 'react';
-import { setAmount } from '../../../../common/api';
+import { setDocument } from '../../../../common/api';
 import Button from '../../../../components/button/Button';
 import { AppContext } from '../../../../common/AppContext';
 import './CheckoutModal.sass';
 import { nanoid } from 'nanoid';
 import Modal from '../../../../components/container/modal/Modal';
 import QRCode from 'qrcode.react';
+import { Product } from '../../../../typings/Product';
 
 interface CheckoutModalProps {
   closeCheckoutModal: () => void;
   submit?: () => void;
 }
 
-export default function CheckoutModal({ closeCheckoutModal, submit }: CheckoutModalProps) {
+export default function CheckoutModal({ closeCheckoutModal }: CheckoutModalProps): React.FunctionComponentElement<CheckoutModalProps> {
   const { selectedProducts, total, setTotal, getAllProducts, setSelectedProducts } = useContext(AppContext);
-  const [cashIn, setCashIn] = useState(0);
+  const [cashIn, setCashIn] = useState<number>(0);
   const [receiptId, setReceiptId] = useState('');
 
-  const handleSubmit = (event: any) => {
-    selectedProducts.forEach((each: any) => {
-      if (each.count) {
-        const doc = { ...each, amount: each.amount - each.count };
+  const handleCheckout = () => {
+    selectedProducts.forEach((product: Product) => {
+      if (product.count) {
+        const doc = { ...product, amount: product.amount - product.count };
         delete doc.count;
-        setAmount(each.type, each.id, doc);
+        setDocument(product.type, product.id, doc);
       }
     });
     setTotal(0);
     setSelectedProducts([]);
-
     getAllProducts();
     closeCheckoutModal();
   };
@@ -36,7 +36,7 @@ export default function CheckoutModal({ closeCheckoutModal, submit }: CheckoutMo
     const id = nanoid();
     const doc = { date: new Date().toUTCString(), id: id, company: 'Epick sale', products: selectedProducts, total: total };
     setReceiptId(id);
-    setAmount('receipt', id, doc);
+    setDocument('receipt', id, doc);
   };
 
   return (
@@ -48,16 +48,22 @@ export default function CheckoutModal({ closeCheckoutModal, submit }: CheckoutMo
             <div className='checkout-content'>
               <div className='col-1'>
                 <ul>
-                  {selectedProducts.map((item: any) => {
-                    return item.count && <li key={item.id}>{`${item.count} ${item.name} ${item.price}€`}</li>;
+                  {selectedProducts.map((product: Product) => {
+                    return product.count && <li key={product.id}>{`${product.count} ${product.name} ${product.price}€`}</li>;
                   })}
                 </ul>
                 <span className='checkout-total'>Total: {total}€</span>
                 {receiptId && <span>Receipt Id: {receiptId}</span>}
               </div>
               <div className='col-2'>
-                <form onSubmit={handleSubmit}>
-                  <input autoFocus type='number' placeholder='Cash in' onChange={(event: any) => setCashIn(event.target.value)} />
+                <form onSubmit={handleCheckout}>
+                  <input
+                    autoFocus
+                    type='number'
+                    placeholder='Cash in'
+                    // eslint-disable-next-line
+                    onChange={(event: React.ChangeEvent<any>) => setCashIn(event.target.value)}
+                  />
                 </form>
                 {cashIn > total && <span className='cash-back'>Cash back: {Math.abs(total - cashIn)} €</span>}
               </div>
@@ -73,7 +79,7 @@ export default function CheckoutModal({ closeCheckoutModal, submit }: CheckoutMo
                 Receipt
               </Button>
             )}
-            <Button disabled={cashIn < total} onClick={() => handleSubmit({})}>
+            <Button disabled={cashIn < total} onClick={() => handleCheckout()}>
               Done
             </Button>
           </div>

@@ -1,9 +1,12 @@
-import React, { useContext, useEffect } from 'react';
-import Button from '../../../../components/button/Button';
+import React from 'react';
 import './Footer.sass';
-import { AppContext } from '../../../../common/AppContext';
 
-export default function Footer({ children, total }: any) {
+interface FooterProps {
+  children: React.ReactNode;
+  total: number;
+}
+
+export default function Footer({ children, total }: FooterProps): React.FunctionComponentElement<FooterProps> {
   return (
     <footer className='footer'>
       <span className='price'>Total: {total} €</span>

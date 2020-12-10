@@ -8,7 +8,7 @@ interface ButtonProps {
   children?: ReactChild;
 }
 
-export default function Button({ type, disabled, onClick, children }: ButtonProps) {
+export default function Button({ type, disabled, onClick, children }: ButtonProps): React.FunctionComponentElement<ButtonProps> {
   return (
     <button
       disabled={disabled}
